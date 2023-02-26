@@ -1,0 +1,51 @@
+Host *
+    ForwardAgent yes
+    AddKeysToAgent yes
+    UseKeychain yes
+    IdentityFile ~/.ssh/id_ecdsa
+    TCPKeepAlive yes
+
+# ========== Webhosts ==========
+
+# ========== Bastions and Tunnels ==========
+
+Host eos
+    User bgreaves
+    Hostname remote.eos.ncsu.edu
+
+Host ezremote
+    User bgreaves
+    Hostname ezremote.csc.ncsu.edu
+
+# Below sets up a tunnel for the pfSense interface through albus
+# Requires VPN to campus
+Host snarefw-tunnel
+    Hostname 152.14.92.122
+    User bgreaves
+    LocalForward  4443 fw0.snare.ncsu.edu:443
+
+# ========== Research VMs ==========
+
+# Requires VPN to campus
+Host albus
+   Hostname 152.14.92.122
+   User bgreaves
+
+Host sirnick
+    Hostname 192.58.122.49
+    User bgr
+
+# Not sure which one this is
+Host robocall 
+    HostName 152.14.92.9
+    User brad
+
+#  ========== Homelab  ==========
+
+Host jellyfin
+    Hostname jellyfin.cqr.fyi
+    User bgr
+
+Host proxmox
+    Hostname proxmox.cqr.fyi
+    User bgr
