@@ -1,0 +1,23 @@
+# auto generate bbl files
+$bibtex_use = 2;
+
+# Setup separate build directories for the final output files and for the aux files
+
+$emulate_aux = 1; # Enable /aux directory on all tex distros
+$aux_dir = "./aux/"; # Logs and intermediate files in /aux
+$out_dir = "./build/"; # Output files in /build
+#
+# default file to build
+@default_files = ("main", "main.tex");
+
+# Use this on a final run to make sure we deal with all warnings
+# $warnings_as_errors
+
+# use pdf latex directly
+$pdf_mode = 1;
+
+# cut run noise
+$silent = 1;
+
+# Do not create an FLS file
+$recorder = 0;
