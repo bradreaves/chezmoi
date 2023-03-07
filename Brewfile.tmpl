@@ -1,0 +1,38 @@
+{{/* All machines */}}
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/cask-fonts"
+tap "homebrew/core"
+
+brew "fish"
+brew "htop"
+brew "pandoc"
+brew "ripgrep"
+
+{{/* All desktops */}}
+
+{{- if eq .isDesktop true -}}
+cask "brave-browser"
+cask "font-ubuntu-mono-nerd-font"
+cask "font-ubuntu-nerd-font"
+cask "insync"
+cask "obsidian"
+cask "spotify"
+cask "visual-studio-code"
+cask "vlc"
+{{- end -}}
+
+{{/* MacOS */}}
+
+{{- if eq .chezmoi.os "darwin" -}}
+cask "iterm2"
+cask "stats"
+
+{{-     if eq .isWork false }}
+cask "steam"
+{{      end -}}
+
+mas "1Blocker", id: 1365531024
+mas "Bitwarden", id: 1352778147
+mas "WhatsApp", id: 1147396723
+{{- end -}}
