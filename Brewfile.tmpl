@@ -4,10 +4,18 @@ tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/core"
 
+brew "chezmoi"
+brew "mas"
+brew "coreutils"
 brew "fish"
 brew "htop"
+brew "ispell"
+brew "neovim"
 brew "pandoc"
 brew "ripgrep"
+brew "tmux"
+brew "wget"
+
 
 {{/* All desktops */}}
 
@@ -15,24 +23,39 @@ brew "ripgrep"
 cask "brave-browser"
 cask "font-ubuntu-mono-nerd-font"
 cask "font-ubuntu-nerd-font"
+cask "font-eb-garamond"
 cask "insync"
 cask "obsidian"
 cask "spotify"
+cask "slack"
 cask "visual-studio-code"
 cask "vlc"
 {{- end -}}
 
 {{/* MacOS */}}
 
-{{- if eq .chezmoi.os "darwin" -}}
+{{- if eq .chezmoi.os "darwin" }}
 cask "iterm2"
+cask "karabiner-elements"
+cask "lunar"
 cask "stats"
+cask "omnigraffle"
+brew "openjdk"
+cask "sourcetree"
 
 {{-     if eq .isWork false }}
 cask "steam"
-{{      end -}}
+{{      end }}
 
 mas "1Blocker", id: 1365531024
 mas "Bitwarden", id: 1352778147
 mas "WhatsApp", id: 1147396723
-{{- end -}}
+mas "CustomSearch", id: 1588019370
+mas "Keynote", id: 409183694
+mas "Microsoft Excel", id: 462058435
+mas "Microsoft PowerPoint", id: 462062816
+mas "Microsoft Word", id: 462054704
+mas "Noir", id: 1592917505
+mas "RadarScope", id: 288419283
+mas "Save to Pocket", id: 1477385213
+{{- end -}} 
