@@ -1,0 +1,8 @@
+{{- $dsktop := promptBool "Is this a desktop install? (Default: yes)" true -}}
+{{- $wrk := promptBool "Is this a work machine? (Default: yes)" true -}}
+
+[data]
+isDesktop = {{ $dsktop }}
+isWork = {{ $wrk }}
+
+
