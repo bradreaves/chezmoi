@@ -9,10 +9,9 @@ This uses `chezmoi` to install and maintain my dotfiles.
 
 ## Todo 
 
-- [ ] Make a ~/src and ~/bin at install time
-- [ ] Set linux and macOS profiles
-- [ ] Make a brew bundle
-- [ ] Setup a function to install the brew bundle
-- [ ] Setup a function to install nerd fonts
-- [ ] Go through /Library/Preferences and ~/Library Preferences for plists to add/set
 - [ ] Set up .gitconfig
+- [ ] Go through /Library/Preferences and ~/Library Preferences for plists to add/set
+- [ ] Make script to install brew bundle
+- [x] Setup Chezmoi config
+- [x] Make a ~/src and ~/bin at install time
+- [x] Make a brew bundle
