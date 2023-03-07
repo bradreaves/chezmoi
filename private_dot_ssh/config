@@ -2,7 +2,6 @@ Host *
     ForwardAgent yes
     AddKeysToAgent yes
     UseKeychain yes
-    IdentityFile ~/.ssh/id_ecdsa
     TCPKeepAlive yes
 
 # ========== Webhosts ==========
