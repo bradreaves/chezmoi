@@ -9,9 +9,10 @@ This uses `chezmoi` to install and maintain my dotfiles.
 
 ## Todo 
 
-- [ ] Set up .gitconfig
 - [ ] Go through /Library/Preferences and ~/Library Preferences for plists to add/set
 - [ ] Make script to install brew bundle
+- [ ] Confirm I want to sync plists
+- [x] Set up .gitconfig
 - [x] Setup Chezmoi config
 - [x] Make a ~/src and ~/bin at install time
 - [x] Make a brew bundle
