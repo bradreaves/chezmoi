@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+
+# Install homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install brew bundle
+# TODO
+
+# Install fisher
+curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+fisher update # Install plugins
+
