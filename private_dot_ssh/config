@@ -1,4 +1,6 @@
 Host *
+    # Handles Mac/Linux differences
+    IgnoreUnknown AddKeysToAgent,UseKeychain  
     ForwardAgent yes
     AddKeysToAgent yes
     UseKeychain yes
@@ -47,4 +49,8 @@ Host jellyfin
 
 Host proxmox
     Hostname proxmox.cqr.fyi
+    User bgr
+
+Host k3s-1
+    Hostname 10.0.1.44
     User bgr
