@@ -33,7 +33,7 @@ abbr --add cpsshkey "cat ~/.ssh/id_ecdsa.pub | pbcopy"
 ## Other aliases
 
 abbr --add cm "chezmoi"
-abbr --add cmcd "cd /Users/bgr/.local/share/chezmoi" # Go to chezmoi directory
+abbr --add cmcd "cd ~/.local/share/chezmoi" # Go to chezmoi directory
 abbr --add cmst "chezmoi status" 
 
 abbr --add ll "ls -lh"
