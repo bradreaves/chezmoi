@@ -49,8 +49,8 @@ Host jellyfin
 
 Host proxmox
     Hostname proxmox.cqr.fyi
-    User bgr
+    User root
 
 Host k3s-1
-    Hostname 10.0.1.44
+    Hostname 10.127.0.130
     User bgr
