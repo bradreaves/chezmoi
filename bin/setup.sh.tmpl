@@ -4,7 +4,12 @@
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # Install brew bundle
-# TODO
+{{- if eq .chezmoi.os "darwin" }}
+brewbin =  /usr/local/bin/brew
+{{ else if eq .chezmoi.os "linux" }}
+brewbin = /home/linuxbrew/.linuxbrew/bin/brew
+{{- end -}} 
+$brewbin bundle install --verbose --file ~/Brewfile 
 
 # Install fisher
 curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
