@@ -11,6 +11,7 @@ This uses `chezmoi` to install and maintain my dotfiles.
 
 - [ ] Convert setup.sh into a series of commands rather than a single long
   running script. (e.g., `setup brew` `setup fisher` etc.)
+- [ ] Migrate fish prompt to something that can go into CM
 - [ ] Go through /Library/Preferences and ~/Library Preferences for plists to add/set
 - [ ] Make script to install brew bundle
 - [ ] Confirm I want to sync plists
