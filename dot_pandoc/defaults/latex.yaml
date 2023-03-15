@@ -1,0 +1,13 @@
+
+# Overall Settings
+verbosity: ERROR
+template: default
+strip-comments: true
+
+# Latex Variables
+variables:
+  documentclass: scrarticle
+  geometry: margin=1in
+  papersize: letter
+  fontsize: 11pt
+  urlstyle: tt
