@@ -2,7 +2,6 @@
 
 # Install homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
 # Install brew bundle
 {{- if eq .chezmoi.os "darwin" }}
 brewbin =  /usr/local/bin/brew
@@ -15,9 +14,9 @@ $brewbin bundle install --verbose --file ~/Brewfile
 curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
 fisher update # Install plugins
 
-# TODO: Autoconfig iterm2 to use preferences
-# http://stratus3d.com/blog/2015/02/28/sync-iterm2-profile-with-dotfiles-repository/
+# Autoconfig iterm2 to use preferences
+# Howto: http://stratus3d.com/blog/2015/02/28/sync-iterm2-profile-with-dotfiles-repository/
 # # Specify the preferences directory
-#defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/dotfiles/iterm2"
+defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/.config/iterm2/bgr"
 # Tell iTerm2 to use the custom preferences in the directory
-# defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
+defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
