@@ -54,3 +54,7 @@ Host proxmox
 Host k3s-1
     Hostname 10.127.0.130
     User bgr
+
+Host foreman
+    Hostname 10.127.0.132
+    User bgr
