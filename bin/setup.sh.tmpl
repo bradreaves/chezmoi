@@ -7,7 +7,13 @@
 brewbin =  /usr/local/bin/brew
 {{ else if eq .chezmoi.os "linux" }}
 brewbin = /home/linuxbrew/.linuxbrew/bin/brew
+
+# For ubuntu: set ppa for fish to get latest version
+sudo apt-add-repository ppa:fish-shell/release-3
+sudo apt update
+sudo apt install fish
 {{- end -}} 
+
 $brewbin bundle install --verbose --file ~/Brewfile 
 
 # Install fisher
