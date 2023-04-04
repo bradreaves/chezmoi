@@ -1,5 +1,7 @@
 [user]
-	email = bgr@bgr-23mbp
+	email = brad@reaves.email
 	name = Brad Reaves
 [pull]
 	ff = only
+[core]
+ 	excludesfile = ~/.config/git/gitignore_global
