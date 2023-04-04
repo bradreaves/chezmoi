@@ -58,3 +58,7 @@ Host k3s-1
 Host foreman
     Hostname 10.127.0.132
     User bgr
+
+Host ubuntu1
+    Hostname 10.127.0.129
+    User bgr
