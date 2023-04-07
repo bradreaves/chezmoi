@@ -62,3 +62,7 @@ Host foreman
 Host ubuntu1
     Hostname 10.127.0.129
     User bgr
+
+Host 23macmini
+    Hostname 10.0.1.9
+    User bgr
