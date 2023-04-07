@@ -2,6 +2,8 @@
 	email = brad@reaves.email
 	name = Brad Reaves
 [pull]
-	ff = only
+	rebase = true
 [core]
  	excludesfile = ~/.config/git/gitignore_global
+[diff]
+	colorMoved = zebra
