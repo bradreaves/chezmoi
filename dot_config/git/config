@@ -3,7 +3,10 @@
 	name = Brad Reaves
 [pull]
 	rebase = true
+	ff = only
+[push]
+	autoSetupRemote = true
 [core]
- 	excludesfile = ~/.config/git/gitignore_global
+	excludesfile = ~/.config/git/gitignore_global
 [diff]
 	colorMoved = zebra
