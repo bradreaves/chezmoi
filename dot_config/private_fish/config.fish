@@ -40,6 +40,11 @@ abbr --add ll "ls -lh"
 abbr --add lll "ls -lah"
 abbr --add llll "ls -lRah"
 
+abbr --add gst "git status"
+abbr --add gco "git checkout"
+abbr --add gc "git commit"
+
+
 # Below is broken and does not work. I need to research how fish actually does
 # this. Or find a plugin.
 #abbr --add gofish "source ~/.config/fish/conf.d/*"
