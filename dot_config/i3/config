@@ -390,8 +390,7 @@ exec --no-startup-id dex --autostart --environment i3
 # configure multiple keyboard layouts and hotkey to switch (Alt+CAPSLOCK in this example)
 #exec --no-startup-id setxkbmap -layout 'us,sk' -variant altgr-intl,qwerty -option 'grp:alt_caps_toggle'
 # BR: Swap Super and CTRL, set CAPS to ESC
-exec setxkbmap -option "caps:escape"
-exec setxkbmap -option "ctrl:swap_lwin_lctl"
+exec setxkbmap -option "caps:escape,ctrl:swap_lwin_lctl"
 
 # start conky:
 #exec_always --no-startup-id conky
