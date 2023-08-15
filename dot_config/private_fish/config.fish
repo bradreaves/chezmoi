@@ -51,5 +51,5 @@ abbr --add gc "git commit"
 
 ## Path management
 
-fish_add_path "~/bin"
+fish_add_path ~/bin
 
