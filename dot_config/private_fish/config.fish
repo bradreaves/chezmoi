@@ -30,6 +30,7 @@ abbr --add cpsshkey "cat ~/.ssh/id_ecdsa.pub | pbcopy"
 # Checking for OS: https://github.com/fish-shell/fish-shell/issues/8203
 # See also "fish-core-utils" plugin -- has a is:macos function (etc)
 
+
 ## Other aliases
 
 abbr --add cm "chezmoi"
@@ -51,5 +52,14 @@ abbr --add gc "git commit"
 
 ## Path management
 
-fish_add_path ~/bin
+#fish_add_path $HOME/bin
 
+## Add XDG variables because Arch doesn't set them for some reason
+set --global --export XDG_CACHE_HOME $HOME/.cache
+set --global --export XDG_CONFIG_HOME $HOME/.config
+set --global --export XDG_DATA_HOME $HOME/.local/share
+set --global --export XDG_STATE_HOME $HOME/.local/state
+set --global --export EDITOR nvim 
+
+
+set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /home/bgr/.ghcup/bin $PATH # ghcup-env
