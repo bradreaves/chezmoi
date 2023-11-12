@@ -54,5 +54,5 @@ abbr --add gc "git commit"
 fish_add_path ~/bin
 
 # Add pyenv's shims etc.
-pyenv init - | source
+command -sq pyenv; and pyenv init - | source
 
