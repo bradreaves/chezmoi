@@ -1,2 +1,15 @@
 README.md
 LICENSE
+
+bin/setup.sh
+
+{{ if ne .chezmoi.os "darwin" }}
+.config/Brewfile
+.config/iterm2
+.config/karabiner
+{{ end }}
+{{ if ne .chezmoi.os "linux" }}
+.config/i3
+.config/packages.list
+{{ end }}
+
