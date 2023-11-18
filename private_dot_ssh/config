@@ -66,3 +66,8 @@ Host ubuntu1
 Host 23macmini
     Hostname 10.0.1.9
     User bgr
+
+Host archon
+    Hostname 10.0.1.87
+    User bgr
+
