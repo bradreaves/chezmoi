@@ -52,7 +52,7 @@ abbr --add gc "git commit"
 
 ## Path management
 
-#fish_add_path $HOME/bin
+fish_add_path {{ .chezmoi.homeDir -}}/bin
 
 set --global --export EDITOR nvim 
 
