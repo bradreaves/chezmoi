@@ -51,18 +51,12 @@ Host proxmox
     Hostname proxmox.cqr.fyi
     User root
 
-Host k3s-1
-    Hostname 10.127.0.130
-    User bgr
-
-Host foreman
-    Hostname 10.127.0.132
-    User bgr
-
-Host ubuntu1
-    Hostname 10.127.0.129
-    User bgr
+#  ========== Workstations ==========
 
 Host 23macmini
     Hostname 10.0.1.81
+    User bgr
+
+Host archon
+    Hostname 10.0.1.87
     User bgr
