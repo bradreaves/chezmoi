@@ -64,5 +64,5 @@ Host ubuntu1
     User bgr
 
 Host 23macmini
-    Hostname 10.0.1.9
+    Hostname 10.0.1.81
     User bgr
