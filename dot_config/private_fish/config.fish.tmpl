@@ -1,9 +1,12 @@
+## WARNING: THIS FILE IS MANAGED AS A CHEZMOI TEMPLATE
+## To edit, exit and run `chezmoi edit config.fish`
+
 if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 
-# Brad Reaves handy functions/abbreviations
 
+# Brad Reaves handy functions/abbreviations
 
 ## nvim management
 
@@ -15,20 +18,18 @@ function vi --wraps=nvim --description 'alias vi=nvim'
   nvim $argv
 end
 
-# Get to old vim if nvim gets borked
+#### Get to old vim if nvim gets borked
 function oldvim --wraps=nvim --description 'alias oldvim=/usr/bin/vim'
   /usr/bin/vim $argv
 end
 
 ## SSH helper functions
 
-### Copy ssh key to clipboard
+
+{{- if eq .chezmoi.os "darwin" }}
+#### Copy ssh key to clipboard
 abbr --add cpsshkey "cat ~/.ssh/id_ecdsa.pub | pbcopy"
-
-## Notes for future
-
-# Checking for OS: https://github.com/fish-shell/fish-shell/issues/8203
-# See also "fish-core-utils" plugin -- has a is:macos function (etc)
+{{- end }}
 
 ## Other aliases
 
@@ -51,7 +52,19 @@ abbr --add gc "git commit"
 
 ## Path management
 
-fish_add_path ~/bin
+fish_add_path {{ .chezmoi.homeDir -}}/bin
+
+set --global --export EDITOR nvim 
+
+{{- if eq .chezmoi.hostname "2014mbp" }}
+## Add XDG variables because Arch doesn't set them for some reason
+set --global --export XDG_CACHE_HOME $HOME/.cache
+set --global --export XDG_CONFIG_HOME $HOME/.config
+set --global --export XDG_DATA_HOME $HOME/.local/share
+set --global --export XDG_STATE_HOME $HOME/.local/state
+
+set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /home/bgr/.ghcup/bin $PATH # ghcup-env
+{{- end }}
 
 # Add pyenv's shims etc.
 command -sq pyenv; and pyenv init - | source
