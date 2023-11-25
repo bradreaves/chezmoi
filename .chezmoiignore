@@ -11,5 +11,6 @@ bin/setup.sh
 {{ if ne .chezmoi.os "linux" }}
 .config/i3
 .config/packages.list
+.config/i3status
 {{ end }}
 
