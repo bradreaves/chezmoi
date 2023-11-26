@@ -47,8 +47,16 @@ Host jellyfin
     Hostname jellyfin.cqr.fyi
     User bgr
 
-Host proxmox
-    Hostname proxmox.cqr.fyi
+Host pve1
+    Hostname pve1.cqr.fyi
+    User root
+
+Host pve2
+    Hostname pve2.cqr.fyi
+    User root
+
+Host nas1
+    Hostname 10.127.0.4
     User root
 
 #  ========== Workstations ==========
