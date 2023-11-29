@@ -57,16 +57,11 @@ Host pve2
 
 Host nas1
     Hostname 10.127.0.4
-    User root
 
 #  ========== Workstations ==========
 
 Host 23macmini
     Hostname 10.0.1.81
-    User bgr
-
-Host archon
-    Hostname 10.0.1.87
     User bgr
 
 Host archon
