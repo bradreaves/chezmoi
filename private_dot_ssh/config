@@ -41,6 +41,10 @@ Host robocall
     HostName 152.14.92.9
     User brad
 
+Host minerva
+    HostName minerva.csc.ncsu.edu
+    User bgreaves
+
 #  ========== Homelab  ==========
 
 Host jellyfin
