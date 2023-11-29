@@ -3,7 +3,7 @@
 
 {{- if eq .chezmoi.hostname "archon" -}}
 {{   include "dot_config/i3/archon.config" -}}
-{{- else if eq .chezmoi.os "14mbp" -}}
+{{- else if eq .chezmoi.hostname "14mbp" -}}
 {{   include "dot_config/i3/14mbp.config" -}}
 {{- else -}}
 {{   include "dot_config/i3/archon.config" -}}
