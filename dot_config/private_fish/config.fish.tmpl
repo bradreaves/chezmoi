@@ -59,7 +59,12 @@ fish_add_path {{ .chezmoi.homeDir -}}/bin
 
 set --global --export EDITOR nvim 
 
+{{- if eq .chezmoi.hostname "archon" }}
+set -x TERMINAL "/usr/bin/alacritty"
+{{- end }}
 {{- if eq .chezmoi.hostname "14mbp" }}
+
+
 ## Add XDG variables because Arch doesn't set them for some reason
 set --global --export XDG_CACHE_HOME $HOME/.cache
 set --global --export XDG_CONFIG_HOME $HOME/.config

@@ -1,7 +1,8 @@
 # Configuration for Alacritty, the GPU enhanced terminal emulator.
 
 import:
-  - ~/.config/alacritty/themes/romorrow_night_bright.yaml
+  - ~/.config/alacritty/themes/monokai-pro-alacritty.yaml
+
 
 window:
   decorations: full
@@ -17,8 +18,8 @@ scrolling:
 # Font configuration
 font:
   normal:
-    family: "UbuntuMono Nerd Font"
-  size: 14.0 
+    family: "IosevkaTerm NF"
+  size: 20.0 
 
 # Bell
 bell:
