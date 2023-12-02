@@ -59,12 +59,15 @@ fish_add_path {{ .chezmoi.homeDir -}}/bin
 
 set --global --export EDITOR nvim 
 
-{{- if eq .chezmoi.hostname "2014mbp" }}
+{{- if eq .chezmoi.hostname "14mbp" }}
 ## Add XDG variables because Arch doesn't set them for some reason
 set --global --export XDG_CACHE_HOME $HOME/.cache
 set --global --export XDG_CONFIG_HOME $HOME/.config
 set --global --export XDG_DATA_HOME $HOME/.local/share
 set --global --export XDG_STATE_HOME $HOME/.local/state
+
+### Set socket env variable for ssh-agent
+set -x SSH_AUTH_SOCK $XDG_RUNTIME_DIR/ssh-agent.socket
 
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /home/bgr/.ghcup/bin $PATH # ghcup-env
 {{- end }}
