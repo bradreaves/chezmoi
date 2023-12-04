@@ -36,7 +36,7 @@ Host sirnick
     Hostname 192.58.122.49
     User bgr
 
-# Not sure which one this is
+# This is "floo"
 Host robocall 
     HostName 152.14.92.9
     User brad
