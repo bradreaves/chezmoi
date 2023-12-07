@@ -3,7 +3,6 @@
 import:
   - ~/.config/alacritty/themes/monokai-pro-alacritty.yaml
 
-
 window:
   decorations: full
   title: Alacritty
@@ -19,7 +18,7 @@ scrolling:
 font:
   normal:
     family: "IosevkaTerm NF"
-  size: 20.0 
+  size: 24.0 
 
 # Bell
 bell:
