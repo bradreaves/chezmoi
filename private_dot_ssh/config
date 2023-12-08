@@ -47,10 +47,6 @@ Host minerva
 
 #  ========== Homelab  ==========
 
-Host jellyfin
-    Hostname jellyfin.cqr.fyi
-    User bgr
-
 Host pve1
     Hostname pve1.cqr.fyi
     User root
@@ -61,6 +57,14 @@ Host pve2
 
 Host nas1
     Hostname 10.127.0.4
+
+Host demiurge
+    Hostname demiurge.llama-bass.ts.net
+    User bgr
+
+Host sophia
+    Hostname sophia.cqr.fyi
+    User bgr
 
 #  ========== Workstations ==========
 
