@@ -1,0 +1,25 @@
+--no-playlist
+--no-abort-on-error
+--no-overwrites
+
+--windows-filenames
+--paths "temp:/tmp"
+--output "%(id)s/%(title)s.%(ext)s"
+--remux-video "mkv"
+
+--download-archive yt-dlp-archive.txt
+
+--write-info-json  
+--clean-info-json
+--write-thumbnail
+--write-desktop-link
+--write-description
+--write-subs
+
+--embed-metadata
+--embed-chapters
+--embed-info-json
+--embed-subs
+
+--progress
+--console-title
