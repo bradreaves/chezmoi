@@ -7,6 +7,11 @@ window:
   decorations: full
   title: Alacritty
   dynamic_title: true
+  opacity: 0.1
+  blur: true
+  padding:
+    x: 15
+    y: 15
 
 scrolling:
   # Maximum number of lines in the scrollback buffer.
@@ -17,8 +22,8 @@ scrolling:
 # Font configuration
 font:
   normal:
-    family: "IosevkaTerm NF"
-  size: 10
+    family: "IosevkaTerm NFM"
+  size: 24
 
 # Bell
 bell:
