@@ -10,3 +10,5 @@
 	excludesfile = ~/.config/git/gitignore_global
 [diff]
 	colorMoved = zebra
+[init]
+    defaultBranch = main
