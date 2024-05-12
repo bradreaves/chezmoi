@@ -66,6 +66,28 @@ Host sophia
     Hostname sophia.cqr.fyi
     User bgr
 
+
+#  ========== Tailnet ==========
+Host ts-pve1
+    Hostname pve1.llama-bass.ts.net
+    User root
+
+Host ts-pve2
+    Hostname pve2.llama-bass.ts.net
+    User root
+
+Host ts-nas1
+    Hostname nas1.llama-bass.ts.net
+
+Host ts-demiurge
+    Hostname demiurge.llama-bass.ts.net
+    User bgr
+
+Host ts-sophia
+    Hostname sophia.llama-bass.ts.net
+    User bgr
+
+
 #  ========== Workstations ==========
 
 Host 23macmini
