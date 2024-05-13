@@ -16,8 +16,10 @@ vi_mode_style = "Block"
 blinking = "On"
 shape = "Underline"
 
+{{- if eq .chezmoi.hostname "archon" }}
 [font]
 size = 24
+{{- end }}
 
 [font.normal]
 family = "IosevkaTerm NFM"
