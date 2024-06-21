@@ -21,9 +21,20 @@ Host ezremote
 # Below sets up a tunnel for the pfSense interface through albus
 # Requires VPN to campus
 Host snarefw-tunnel
-    Hostname 152.14.92.122
+    Hostname minerva.csc.ncsu.edu
     User bgreaves
     LocalForward  4443 fw0.snare.ncsu.edu:443
+
+
+# ========== WSPR Servers ==========
+
+Host rvx54
+    Hostname eb2rvx54.csc.ncsu.edu
+    User root
+
+Host wtl-1
+    Hostname eb2rvx15.csc.ncsu.edu
+    User root
 
 # ========== Research VMs ==========
 
