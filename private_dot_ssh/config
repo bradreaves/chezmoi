@@ -25,7 +25,6 @@ Host snarefw-tunnel
     User bgreaves
     LocalForward  4443 fw0.snare.ncsu.edu:443
 
-
 # ========== WSPR Servers ==========
 
 Host rvx54
