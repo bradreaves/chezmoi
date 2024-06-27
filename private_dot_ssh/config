@@ -32,6 +32,10 @@ Host rvx54
     Hostname eb2rvx54.csc.ncsu.edu
     User bgreaves
 
+Host rvx18
+    Hostname eb2rvx18.csc.ncsu.edu
+    User root
+
 Host wtl-1
     Hostname eb2rvx15.csc.ncsu.edu
     User root
@@ -58,6 +62,10 @@ Host robocall
 
 Host minerva
     HostName minerva.csc.ncsu.edu
+    User bgreaves
+
+Host molly
+    HostName molly.csc.ncsu.edu
     User bgreaves
 
 #  ========== Homelab  ==========

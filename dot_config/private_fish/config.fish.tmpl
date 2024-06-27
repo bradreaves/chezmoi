@@ -41,6 +41,8 @@ abbr --add ll "ls -lh"
 abbr --add lll "ls -lah"
 abbr --add llll "ls -lRah"
 
+abbr --add y 'yazi'
+
 abbr --add gcl "git clone"
 abbr --add gco "git checkout"
 abbr --add gst "git status"
@@ -61,9 +63,6 @@ abbr --add s "sudo"
 abbr --add dnfs "dnf search"
 abbr --add dnfi "sudo dnf install"
 
-# Make abbr to fix Endeavour keyboard map
-abbr --add colemak 'setxkbmap -layout us -variant colemak_dh -option "caps:escape,ctrl:swap_lwin_lctl"'
-
 # Below is broken and does not work. I need to research how fish actually does
 # this. Or find a plugin.
 #abbr --add gofish "source ~/.config/fish/conf.d/*"
@@ -79,6 +78,8 @@ set -x TERMINAL "/usr/bin/alacritty"
 {{- end }}
 {{- if eq .chezmoi.hostname "14mbp" }}
 
+# Make abbr to fix Endeavour keyboard map
+abbr --add colemak 'setxkbmap -layout us -variant colemak_dh -option "caps:escape,ctrl:swap_lwin_lctl"'
 
 ## Add XDG variables because Arch doesn't set them for some reason
 set --global --export XDG_CACHE_HOME $HOME/.cache
@@ -96,4 +97,4 @@ set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; se
 command -sq pyenv; and pyenv init - | source
 
 # Something for byobu
-#status --is-login; and status --is-interactive; and exec byobu-launcher
+# status --is-login; and status --is-interactive; and exec byobu-launcher
