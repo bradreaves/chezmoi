@@ -27,22 +27,25 @@ Host snarefw-tunnel
 
 # ========== WSPR Servers ==========
 
-
 Host rvx54
     Hostname eb2rvx54.csc.ncsu.edu
     User bgreaves
-
-Host rvx18
-    Hostname eb2rvx18.csc.ncsu.edu
-    User root
 
 Host wtl-1
     Hostname eb2rvx15.csc.ncsu.edu
     User root
 
+Host wtl-2
+    Hostname eb2rvx16.csc.ncsu.edu
+    User root
+
 Host wtl-3
     Hostname eb2rvx17.csc.ncsu.edu
     User bgreaves
+
+Host wtl-4
+    Hostname eb2rvx18.csc.ncsu.edu
+    User root
 
 # ========== Research VMs ==========
 
