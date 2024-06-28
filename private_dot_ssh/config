@@ -1,3 +1,5 @@
+# Documentation: https://www.man7.org/linux/man-pages/man5/ssh_config.5.html
+
 Host *
     # Handles Mac/Linux differences
     IgnoreUnknown AddKeysToAgent,UseKeychain  
@@ -6,7 +8,9 @@ Host *
     UseKeychain yes
     TCPKeepAlive yes
 
-# ========== Webhosts ==========
+# TODO: Break out the sections below into files that 
+#       I can then use the `Include` directive to make
+#       this modular.
 
 # ========== Bastions and Tunnels ==========
 
@@ -18,12 +22,14 @@ Host ezremote
     User bgreaves
     Hostname ezremote.csc.ncsu.edu
 
-# Below sets up a tunnel for the pfSense interface through albus
+# Below sets up a tunnel for the pfSense interface through minerva
 # Requires VPN to campus
 Host snarefw-tunnel
     Hostname minerva.csc.ncsu.edu
     User bgreaves
     LocalForward  4443 fw0.snare.ncsu.edu:443
+    # Below says "don't open a shell for this"
+    SessionType none
 
 # ========== WSPR Servers ==========
 
@@ -33,11 +39,11 @@ Host rvx54
 
 Host wtl-1
     Hostname eb2rvx15.csc.ncsu.edu
-    User root
+    User bgreaves
 
 Host wtl-2
     Hostname eb2rvx16.csc.ncsu.edu
-    User root
+    User bgreaves
 
 Host wtl-3
     Hostname eb2rvx17.csc.ncsu.edu
