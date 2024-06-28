@@ -77,6 +77,16 @@ Host molly
     HostName molly.csc.ncsu.edu
     User bgreaves
 
+# This is robocall-honeypot-3.csc.ncsu.edu
+Host fang
+    Hostname fang.snare.science
+    User bgreaves
+
+# This is robocall-honeypot-4.csc.ncsu.edu
+Host fawkes
+    Hostname fawkes.snare.science
+    User bgreaves
+
 #  ========== Homelab  ==========
 
 Host pve1
