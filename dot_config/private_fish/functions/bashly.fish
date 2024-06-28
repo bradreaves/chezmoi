@@ -5,6 +5,6 @@ function bashly
     
     $CONTAINER_ENG run --rm -it \
         --user $(id -u):$(id -g) \
-        --volume "$PWD:/app" \
+        --volume "$PWD:/app:z" \
         dannyben/bashly $argv
 end
