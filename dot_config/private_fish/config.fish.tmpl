@@ -56,7 +56,7 @@ abbr --add gup 'git add -u; and git commit -m'
 abbr --add ts "sudo tailscale"
 abbr --add tsst "tailscale status"
 
-set ANSIBLE_DIR "/home/bgr/src/homelab/ansible/homelab.ini"
+set ANSIBLE_DIR "/home/bgr/src/homelab/ansible"
 
 abbr --add a68 "ansible-playbook"
 abbr --add a6home "ansible-playbook -i $ANSIBLE_DIR/homelab.ini $ANSIBLE_DIR/site.yml"
@@ -67,7 +67,7 @@ abbr --add dnfi "sudo dnf install"
 
 # Below is broken and does not work. I need to research how fish actually does
 # this. Or find a plugin.
-#abbr --add gofish "source ~/.config/fish/conf.d/*"
+abbr --add gofish "source ~/.config/fish/config.fish"
 
 ## Path management
 
@@ -82,6 +82,7 @@ set -x TERMINAL "/usr/bin/alacritty"
 
 # Make abbr to fix Endeavour keyboard map
 abbr --add colemak 'setxkbmap -layout us -variant colemak_dh -option "caps:escape,ctrl:swap_lwin_lctl"'
+abbr --add qwerty 'setxkbmap -layout us -option "caps:escape,ctrl:swap_lwin_lctl"'
 
 ## Add XDG variables because Arch doesn't set them for some reason
 set --global --export XDG_CACHE_HOME $HOME/.cache
