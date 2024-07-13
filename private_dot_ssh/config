@@ -104,9 +104,12 @@ Host demiurge
     Hostname demiurge.llama-bass.ts.net
     User bgr
 
+# For some reason, Debian doesn't know about Alacritty
+# so I need to use a different TERM value
 Host sophia
     Hostname sophia.cqr.fyi
     User bgr
+    SetEnv TERM=xterm-256color
 
 
 #  ========== Tailnet ==========
