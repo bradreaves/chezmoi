@@ -3,6 +3,7 @@
 
 if status is-interactive
     # Commands to run in interactive sessions can go here
+    #set fish_trace true
 end
 
 
@@ -49,7 +50,7 @@ abbr --add gcl "git clone"
 abbr --add gco "git checkout"
 abbr --add gst "git status"
 abbr --add gc "git commit"
-abbr --add gcm "git commit -m"
+abbr --add gcm "git commit -m '"
 abbr --add gau "git add -u"
 abbr --add gup 'git add -u; and git commit -m'
 
@@ -65,8 +66,7 @@ abbr --add s "sudo"
 abbr --add dnfs "dnf search"
 abbr --add dnfi "sudo dnf install"
 
-# Below is broken and does not work. I need to research how fish actually does
-# this. Or find a plugin.
+# Macro to reload fish config
 abbr --add gofish "source ~/.config/fish/config.fish"
 
 ## Path management
@@ -78,6 +78,7 @@ set --global --export EDITOR nvim
 {{- if eq .chezmoi.hostname "archon" }}
 set -x TERMINAL "/usr/bin/alacritty"
 {{- end }}
+
 {{- if eq .chezmoi.hostname "14mbp" }}
 
 # Make abbr to fix Endeavour keyboard map
@@ -97,7 +98,7 @@ set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; se
 {{- end }}
 
 # Add pyenv's shims etc.
-command -sq pyenv; and pyenv init - | source
+#command -sq pyenv; and pyenv init - | source
 
 # Something for byobu
 # status --is-login; and status --is-interactive; and exec byobu-launcher
