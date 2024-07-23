@@ -4,48 +4,85 @@ tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/core"
 
+brew "bat"
+brew "btop"
+brew "byobu"
 brew "coreutils"
 brew "fish"
 brew "htop"
 brew "ispell"
 brew "neovim"
-brew "pandoc"
 brew "ripgrep"
 brew "tmux"
+brew "trash"
+brew "tree"
 brew "wget"
+brew "yazi"
 
 
 {{/* All desktops */}}
 
 {{- if eq .isDesktop true -}}
-cask "brave-browser"
-cask "font-ubuntu-mono-nerd-font"
-cask "font-ubuntu-nerd-font"
-cask "font-eb-garamond"
+cask "balenaetcher"
+cask "firefox"
 brew "hugo"
 cask "insync"
+cask "mactex-no-gui"
 cask "obsidian"
+brew "pandoc"
+cask "scribus"
 cask "spotify"
 cask "slack"
 cask "visual-studio-code"
 cask "vlc"
 cask "zotero"
 cask "zoom"
+
+cask "font-archivo"
+cask "font-archivo-black"
+cask "font-archivo-narrow"
+cask "font-eb-garamond"
+cask "font-iosevka"
+cask "font-iosevka-aile"
+cask "font-iosevka-comfy"
+cask "font-iosevka-curly"
+cask "font-iosevka-curly-slab"
+cask "font-iosevka-etoile"
+cask "font-iosevka-nerd-font"
+cask "font-iosevka-term-nerd-font"
+cask "font-iosevka-term-slab-nerd-font"
+cask "font-ubuntu-mono-nerd-font"
+cask "font-ubuntu-nerd-font"
+
+vscode "bradlc.vscode-tailwindcss"
+vscode "budparr.language-hugo-vscode"
+vscode "github.copilot"
+vscode "github.copilot-chat"
+vscode "matangover.mypy"
+vscode "ms-python.autopep8"
+vscode "ms-python.debugpy"
+vscode "ms-python.flake8"
+vscode "ms-python.python"
+vscode "ms-python.vscode-pylance"
+vscode "phr0s.bib"
+vscode "syler.sass-indented"
+vscode "tamasfe.even-better-toml"
+vscode "tomoki1207.pdf"
+
 {{- end -}}
 
 {{/* MacOS */}}
 
 {{- if eq .chezmoi.os "darwin" }}
-cask "amethyst"
+cask "disk-inventory-x"
+cask "insync"
 cask "iterm2"
-cask "karabiner-elements"
 cask "lunar"
-cask "mactex-no-gui"
 brew "mas"
 cask "stats"
 cask "omnigraffle"
 brew "openjdk"
-cask "sourcetree"
+cask "tunnelblick"
 
 {{-     if eq .isWork false }}
 cask "steam"
@@ -53,13 +90,14 @@ cask "steam"
 
 mas "1Blocker", id: 1365531024
 mas "Bitwarden", id: 1352778147
+mas "iMovie", id: 408981434
 mas "Keynote", id: 409183694
 mas "Microsoft Excel", id: 462058435
 mas "Microsoft PowerPoint", id: 462062816
 mas "Microsoft Word", id: 462054704
-mas "Noir", id: 1592917505
+mas "Numbers", id: 409203825
+
 mas "RadarScope", id: 288419283
 mas "Save to Pocket", id: 1477385213
 mas "WhatsApp", id: 1147396723
-mas "xSearch", id: 1579902068
 {{- end -}} 
