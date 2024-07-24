@@ -92,6 +92,9 @@ fish_add_path -gP "/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/s
 abbr --add colemak 'setxkbmap -layout us -variant colemak_dh -option "caps:escape,ctrl:swap_lwin_lctl"'
 abbr --add qwerty 'setxkbmap -layout us -option "caps:escape,ctrl:swap_lwin_lctl"'
 
+# Make abbr to wake-on-lan Archon
+abbr --add wakearchon 'wol 50:eb:f6:ce:bf:0e'
+
 ## Add XDG variables because Arch doesn't set them for some reason
 set --global --export XDG_CACHE_HOME $HOME/.cache
 set --global --export XDG_CONFIG_HOME $HOME/.config
