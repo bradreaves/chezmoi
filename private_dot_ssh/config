@@ -12,6 +12,14 @@ Host *
 #       I can then use the `Include` directive to make
 #       this modular.
 
+# Temp
+
+Host huff
+    Hostname 172.16.122.39
+    User root
+    ProxyJump minerva
+
+
 # ========== Bastions and Tunnels ==========
 
 Host eos
