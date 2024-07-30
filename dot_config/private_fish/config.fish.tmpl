@@ -28,6 +28,9 @@ end
 
 
 {{- if eq .chezmoi.os "darwin" }}
+#### Ensure Homebrew in path 
+fish_add_path /opt/homebrew/bin
+
 #### Copy ssh key to clipboard
 abbr --add cpsshkey "cat ~/.ssh/id_ecdsa.pub | pbcopy"
 {{- end }}
