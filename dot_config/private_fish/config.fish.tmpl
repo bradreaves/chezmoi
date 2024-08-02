@@ -73,6 +73,7 @@ abbr --add gofish "source ~/.config/fish/config.fish"
 ## Path management
 
 fish_add_path {{ .chezmoi.homeDir -}}/bin
+fish_add_path {{ .chezmoi.homeDir -}}/.local/bin
 
 set --global --export EDITOR nvim 
 
