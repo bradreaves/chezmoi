@@ -32,16 +32,16 @@ end
 fish_add_path /opt/homebrew/bin
 
 #### Copy ssh key to clipboard
-abbr --add cpsshkey "cat ~/.ssh/id_ecdsa.pub | pbcopy"
+abbr --add cpsshkey "cat {{ .chezmoi.homeDir -}}/.ssh/id_ecdsa.pub | pbcopy"
 {{- end }}
 
 ## Other aliases
 
 abbr --add cm "chezmoi"
-abbr --add cmcd "cd ~/.local/share/chezmoi" # Go to chezmoi directory
+abbr --add cmcd "cd {{ .chezmoi.homeDir -}}/.local/share/chezmoi" # Go to chezmoi directory
 abbr --add cmst "chezmoi status" 
-abbr --add cmssh "chezmoi edit ~/.ssh/config"
-abbr --add cmfsh "chezmoi edit ~/.config/fish/config.fish"
+abbr --add cmssh "chezmoi edit {{ .chezmoi.homeDir -}}/.ssh/config"
+abbr --add cmfsh "chezmoi edit {{ .chezmoi.homeDir -}}/.config/fish/config.fish"
 
 abbr --add ll "ls -lah"
 abbr --add lll "ls -lRah"
@@ -70,8 +70,10 @@ abbr --add s "sudo"
 abbr --add dnfs "dnf search"
 abbr --add dnfi "sudo dnf install"
 
+abbr --add ncsuvpn "sudo openconnect --config={{ .chezmoi.homeDir -}}/.config/openconnect/ncsu.config"
+
 # Macro to reload fish config
-abbr --add gofish "source ~/.config/fish/config.fish"
+abbr --add gofish "source {{ .chezmoi.homeDir -}}/.config/fish/config.fish"
 
 ## Path management
 
@@ -100,10 +102,10 @@ abbr --add qwerty 'setxkbmap -layout us -option "caps:escape,ctrl:swap_lwin_lctl
 abbr --add wakearchon 'wol 50:eb:f6:ce:bf:0e'
 
 ## Add XDG variables because Arch doesn't set them for some reason
-set --global --export XDG_CACHE_HOME $HOME/.cache
-set --global --export XDG_CONFIG_HOME $HOME/.config
-set --global --export XDG_DATA_HOME $HOME/.local/share
-set --global --export XDG_STATE_HOME $HOME/.local/state
+set --global --export XDG_CACHE_HOME {{ .chezmoi.homeDir -}}/.cache
+set --global --export XDG_CONFIG_HOME {{ .chezmoi.homeDir -}}/.config
+set --global --export XDG_DATA_HOME {{ .chezmoi.homeDir -}}/.local/share
+set --global --export XDG_STATE_HOME {{ .chezmoi.homeDir -}}/.local/state
 
 ### Set socket env variable for ssh-agent
 set -x SSH_AUTH_SOCK $XDG_RUNTIME_DIR/ssh-agent.socket

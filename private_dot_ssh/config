@@ -39,6 +39,13 @@ Host snarefw-tunnel
     # Below says "don't open a shell for this"
     SessionType none
 
+Host wsprfw-tunnel
+    Hostname minerva.csc.ncsu.edu
+    User bgreaves
+    LocalForward  4443 eb2-2291-fw00.csc.ncsu.edu:8443
+    # Below says "don't open a shell for this"
+    SessionType none
+
 # ========== WSPR Servers ==========
 
 Host rvx54
