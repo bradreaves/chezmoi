@@ -32,7 +32,7 @@ end
 fish_add_path /opt/homebrew/bin
 
 #### Copy ssh key to clipboard
-abbr --add cpsshkey "cat {{ .chezmoi.homeDir -}}/.ssh/id_ecdsa.pub | pbcopy"
+abbr --add cpsshkey "cat {{ .chezmoi.homeDir -}}/.ssh/*.pub | pbcopy"
 {{- end }}
 
 ## Other aliases
