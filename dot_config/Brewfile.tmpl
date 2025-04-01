@@ -1,5 +1,4 @@
 {{/* All machines */}}
-tap "homebrew/bundle"
 
 brew "bat"
 brew "btop"
@@ -55,6 +54,7 @@ cask "font-routed-gothic"
 {{/* MacOS */}}
 
 {{- if eq .chezmoi.os "darwin" }}
+cask "colemak-dh"
 cask "disk-inventory-x"
 cask "insync"
 cask "ghostty"
