@@ -40,7 +40,8 @@ This uses `chezmoi` to install and maintain my dotfiles.
  8. Open fish shell
  9. Generate ssh keys and add them to  `~/.ssh/authorized_keys`
 
-
+10. Run `fisher update` to get fish plugins
+11. Run .config/fisher/tide_config.fish to set up the terminal prompt.
 
 10. Add ssh key to Github and NC State Github
 11. Update chezmoi reporemote 
