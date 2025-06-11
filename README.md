@@ -2,23 +2,6 @@
 
 This uses `chezmoi` to install and maintain my dotfiles.
 
-## Roadmap 
-
-- [ ] Convert setup.sh into a series of commands rather than a single long
-  running script. (e.g., `setup brew` `setup fisher` etc.)
-- [ ] Make script to install brew bundle
-- [ ] Confirm I want to sync plists
-- [ ] Go through /Library/Preferences and ~/Library Preferences for plists to add/set
-- [ ] Fix `chezmoi.toml.tmpl` to make "isDesktop" true if on MacOS
-
-
-## Done
-- [x] Set up .gitconfig
-- [x] Setup Chezmoi config
-- [x] Make a ~/src and ~/bin at install time
-- [x] Make a brew bundle
-- [x] Migrate fish prompt to something that can go into CM
-
 ## Setup for Linux
 	
 	# Downloads and installs chezmoi in ~/bin, downloads dotfile repo, and applies it.
@@ -40,7 +23,7 @@ This uses `chezmoi` to install and maintain my dotfiles.
  9. Add new ssh keys to  `~/.ssh/authorized_keys` : `cat ~/.ssh/*.pub >> ~/.ssh/authorized_keys`
 
 10. Run `fisher update` to get fish plugins
-11. Run .config/fisher/tide_config.fish to set up the terminal prompt.
+11. Run .config/fish/tide_config.fish to set up the terminal prompt.
 
 10. Add ssh key to Github and NC State Github
 11. Update chezmoi reporemote: `git remote set-url origin git@github.com:bradreaves/chezmoi.git`
