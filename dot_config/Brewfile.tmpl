@@ -20,6 +20,8 @@ brew "yazi"
 
 {{- if eq .isDesktop true -}}
 cask "balenaetcher"
+cask "claude"
+cask "cursor"
 cask "firefox"
 brew "hugo"
 cask "insync"
@@ -37,11 +39,6 @@ cask "font-archivo"
 cask "font-archivo-black"
 cask "font-archivo-narrow"
 cask "font-eb-garamond"
-cask "font-iosevka"
-cask "font-iosevka-aile"
-cask "font-iosevka-comfy"
-cask "font-iosevka-curly"
-cask "font-iosevka-curly-slab"
 cask "font-iosevka-etoile"
 cask "font-iosevka-nerd-font"
 cask "font-iosevka-term-nerd-font"
@@ -67,14 +64,18 @@ cask "stats"
 cask "steam"
 {{      end }}
 
-mas "1Blocker", id: 1365531024
-mas "Bitwarden", id: 1352778147
-mas "iMovie", id: 408981434
-mas "Keynote", id: 409183694
+{{-     if eq .isWork true }}
 mas "Microsoft Excel", id: 462058435
 mas "Microsoft PowerPoint", id: 462062816
 mas "Microsoft Word", id: 462054704
+{{      end }}
+
+mas "1Blocker", id: 1365531024
+mas "Bitwarden", id: 1352778147
+mas "Kagi for Safari", id: 1622835804
+mas "Keynote", id: 409183694
 mas "Numbers", id: 409203825
 mas "RadarScope", id: 288419283
+mas "Save to Raindrop.io", id: 1549370672
 
 {{- end -}} 
