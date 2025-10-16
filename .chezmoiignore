@@ -3,6 +3,16 @@ LICENSE
 
 bin/setup.sh
 
+# Auto-generated state files (intentionally not managed)
+.config/uv/              # uv package manager receipts
+.config/chezmoi/         # chezmoi meta-configuration
+.vscode/                 # VSCode auto-generated state (argv.json, extensions, CLI state)
+.cursor/                 # Cursor IDE auto-generated state
+.claude.json*            # Claude Code statistics and state tracking
+
+# Stock configurations without customization
+.config/byobu/           # Default byobu config, no meaningful customization
+
 {{ if ne .chezmoi.os "darwin" }}
 .config/Brewfile
 .config/iterm2
