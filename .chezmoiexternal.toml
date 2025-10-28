@@ -1,0 +1,12 @@
+# External repositories managed by chezmoi
+
+["bin/scripts"]
+    type = "git-repo"
+    url = "git@github.com:bradreaves/qol-scripts.git"
+    refreshPeriod = "168h"  # Pull updates weekly
+
+["bin/scripts".pull]
+    args = ["--ff-only"]
+
+["bin/scripts".clone]
+    args = ["--depth", "1"]
