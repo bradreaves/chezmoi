@@ -84,6 +84,11 @@ set --global --export EDITOR nvim
 
 {{- if eq .chezmoi.hostname "ainos" }}
 alias claude="/Users/bgr/.claude/local/claude"
+
+# Claude Code model shortcuts
+abbr --add opus "claude --model opus"
+abbr --add sonnet "claude --model sonnet"
+abbr --add haiku "claude --model haiku"
 {{- end }}
 
 
