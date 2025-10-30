@@ -3,5 +3,5 @@
     "type": "command",
     "command": "input=$(cat); echo \"$(echo \"$input\" | jq -r '.workspace.current_dir') | $(echo \"$input\" | jq -r '.model.display_name')\""
   },
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": false
 }

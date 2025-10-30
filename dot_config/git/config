@@ -14,3 +14,9 @@
     defaultBranch = main
 [credential]
 	helper = osxkeychain
+
+# Use privacy email for all GitHub repos
+[includeIf "hasconfig:remote.*.url:git@github.com:*/**"]
+	path = ~/.config/git/config-github
+[includeIf "hasconfig:remote.*.url:https://github.com/**"]
+	path = ~/.config/git/config-github
