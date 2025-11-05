@@ -2,7 +2,7 @@
 
 ["bin/scripts"]
     type = "git-repo"
-    url = "git@github.com:bradreaves/qol-scripts.git"
+    url = "git@git.sr.ht:~bgr/qol-scripts"
     refreshPeriod = "168h"  # Pull updates weekly
 
 ["bin/scripts".pull]
