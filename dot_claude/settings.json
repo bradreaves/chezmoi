@@ -1,7 +1,117 @@
 {
+  "permissions": {
+    "allow": [
+        "Bash(ls:*)",
+        "Bash(pwd:*)",
+        "Bash(tree:*)",
+        "Bash(find:*)",
+        "Bash(file:*)",
+        "Bash(stat:*)",
+        "Bash(readlink:*)",
+
+        "Bash(cat:*)",
+        "Bash(head:*)",
+        "Bash(tail:*)",
+        "Bash(less:*)",
+        "Bash(more:*)",
+        "Bash(grep:*)",
+        "Bash(rg:*)",
+        "Bash(ag:*)",
+        "Bash(wc:*)",
+        "Bash(diff:*)",
+        "Bash(strings:*)",
+
+        "Bash(whoami:*)",
+        "Bash(hostname:*)",
+        "Bash(uname:*)",
+        "Bash(date:*)",
+        "Bash(uptime:*)",
+        "Bash(env:*)",
+        "Bash(printenv:*)",
+        "Bash(which:*)",
+        "Bash(whereis:*)",
+        "Bash(type:*)",
+        "Bash(locale:*)",
+
+        "Bash(ps:*)",
+        "Bash(top:*)",
+        "Bash(htop:*)",
+        "Bash(pgrep:*)",
+        "Bash(jobs:*)",
+        "Bash(df:*)",
+        "Bash(du:*)",
+        "Bash(mount:*)",
+        "Bash(free:*)",
+
+        "Bash(ping:*)",
+        "Bash(traceroute:*)",
+        "Bash(ifconfig:*)",
+        "Bash(ip:*)",
+        "Bash(netstat:*)",
+        "Bash(ss:*)",
+        "Bash(nslookup:*)",
+        "Bash(dig:*)",
+        "Bash(host:*)",
+        "Bash(curl:*)",
+        "Bash(wget:*)",
+
+        "Bash(git status:*)",
+        "Bash(git log:*)",
+        "Bash(git diff:*)",
+        "Bash(git show:*)",
+        "Bash(git branch:*)",
+        "Bash(git remote:*)",
+        "Bash(git config --list:*)",
+        "Bash(git config --get:*)",
+        "Bash(git ls-files:*)",
+        "Bash(git ls-tree:*)",
+        "Bash(git rev-parse:*)",
+
+        "Bash(brew list:*)",
+        "Bash(brew info:*)",
+        "Bash(brew search:*)",
+        "Bash(npm list:*)",
+        "Bash(npm info:*)",
+        "Bash(pip list:*)",
+        "Bash(pip show:*)",
+        "Bash(gem list:*)",
+        "Bash(cargo search:*)",
+
+        "Bash(docker ps:*)",
+        "Bash(docker images:*)",
+        "Bash(docker inspect:*)",
+        "Bash(kubectl get:*)",
+        "Bash(kubectl describe:*)",
+
+        "Bash(echo:*)",
+        "Bash(printf:*)",
+        "Bash(history:*)",
+        "Bash(man:*)",
+        "Bash(help:*)",
+        "Bash(alias:*)",
+
+        "Bash(chezmoi managed:*)",
+        "Bash(chezmoi source-path:*)",
+        "Bash(chezmoi data:*)",
+        "Bash(chezmoi diff:*)",
+
+        "Read",
+        "Glob",
+        "Grep",
+        "TodoWrite",
+        "AskUserQuestion",
+        "BashOutput",
+        "WebSearch",
+        "WebFetch"
+    ],
+    "deny": [
+      "Bash(rm:*)"
+    ],
+    "ask": []
+  },
   "statusLine": {
     "type": "command",
     "command": "input=$(cat); echo \"$(echo \"$input\" | jq -r '.workspace.current_dir') | $(echo \"$input\" | jq -r '.model.display_name')\""
   },
-  "alwaysThinkingEnabled": false
+  "alwaysThinkingEnabled": true
 }
