@@ -21,13 +21,11 @@ brew "yazi"
 {{- if eq .isDesktop true -}}
 cask "balenaetcher"
 cask "claude"
-cask "cursor"
 cask "firefox"
 brew "hugo"
 cask "insync"
 cask "obsidian"
 brew "pandoc"
-cask "scribus"
 cask "spotify"
 cask "slack"
 cask "visual-studio-code"
@@ -64,7 +62,7 @@ cask "stats"
 cask "steam"
 {{      end }}
 
-{{-     if eq .isWork true }}
+{{-     if eq .isDesktop true }}
 mas "Microsoft Excel", id: 462058435
 mas "Microsoft PowerPoint", id: 462062816
 mas "Microsoft Word", id: 462054704
