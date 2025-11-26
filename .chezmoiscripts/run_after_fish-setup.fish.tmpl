@@ -1,0 +1,18 @@
+#!/usr/bin/env fish
+
+# Update fish plugins via fisher
+if type -q fisher
+    echo "Updating fish plugins..."
+    fisher update
+else
+    echo "fisher not found, skipping plugin update"
+end
+
+# Configure tide prompt
+set tide_config "{{ .chezmoi.homeDir }}/.config/fish/tide_config.fish"
+if test -f $tide_config
+    echo "Configuring tide prompt..."
+    source $tide_config
+else
+    echo "tide_config.fish not found, skipping"
+end
