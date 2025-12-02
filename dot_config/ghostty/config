@@ -43,3 +43,5 @@ font-size  = 16
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 keybind = shift+enter=text:\n
+
+shell-integration-features = ssh-terminfo,ssh-env
