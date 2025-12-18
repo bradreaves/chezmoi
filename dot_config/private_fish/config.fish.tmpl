@@ -81,6 +81,13 @@ fish_add_path {{ .chezmoi.homeDir -}}/.local/bin
 set --global --export EDITOR nvim 
 
 {{- if eq .chezmoi.hostname "ainos" }}
+# Claude Code shortcuts
+abbr --add cc "claude"
+abbr --add ccr "claude --resume"
+abbr --add ccc "claude --continue"
+abbr --add ccf "claude --continue --fork-session"
+abbr --add ccd "claude --dangerously-skip-permissions"
+
 # Claude Code model shortcuts
 abbr --add opus "claude --model opus"
 abbr --add sonnet "claude --model sonnet"
