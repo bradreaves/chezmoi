@@ -142,9 +142,173 @@ logger -t "$(basename "$0")[$$]" -p user.info "action=start status=processing"
 logger -t "$(basename "$0")[$$]" -p user.error "action=fail error=\"missing dependency\""
 ```
 
+## Input/Output Standards (REQUIRED FOR DATA-PROCESSING SCRIPTS)
+
+**CRITICAL:** Scripts that process data (read input, transform, write output) MUST follow these I/O standards.
+
+### Input Handling
+
+**Default to stdin** when no file argument is provided:
+
+```fish
+set input_file "-"
+if test (count $argv) -gt 0
+    set input_file $argv[1]
+end
+
+# Validate file exists (if not stdin)
+if test "$input_file" != "-" -a ! -f "$input_file"
+    echo "Error: Input file not found: $input_file" >&2
+    log_error "action=read_input status=not_found file=\"$input_file\""
+    exit 2
+end
+```
+
+### Output Handling
+
+**Default to stdout**, but provide `-o/--output` flag for file output:
+
+```fish
+set output_file "-"
+set append_mode 0
+
+argparse 'o/output=' 'a/append' -- $argv
+if set -q _flag_output
+    set output_file $_flag_output
+end
+if set -q _flag_append
+    set append_mode 1
+end
+
+# Validate: append requires output file
+if test $append_mode -eq 1 -a "$output_file" = "-"
+    echo "Error: --append requires --output to specify a file" >&2
+    exit 2
+end
+```
+
+### Stream Separation (CRITICAL)
+
+**stdout = data, stderr = messages**
+
+```fish
+# WRONG - mixes data and messages
+echo "Processing 100 items..."
+echo "$result_data"
+
+# CORRECT - separates streams
+echo "Processing 100 items..." >&2  # Progress to stderr
+echo "$result_data"                  # Data to stdout
+```
+
+**Why:** Pipes capture stdout only. Messages on stderr appear to user but don't pollute the data stream.
+
+### Structured Data Output
+
+For structured data, prefer **TSV** (tab-separated values):
+
+```fish
+# TSV format (no header, easy to pipe)
+echo -e "$url\t$title\t$format\t$notes"
+```
+
+**Benefits:**
+- Easy to process with `cut`, `awk`, `sort`
+- No quoting issues like CSV
+- Append-friendly (no header row to skip)
+- Pipe-friendly for tool chaining
+
+## Progress Output Pattern (REQUIRED FOR MULTI-ITEM PROCESSING)
+
+**For scripts that iterate over multiple items or perform long-running operations:**
+
+```fish
+# Auto-detect interactive vs batch mode
+set progress_mode 0
+if isatty stderr
+    set progress_mode 1  # Interactive - show progress by default
+end
+
+# Parse flags (in argparse)
+argparse 'progress' 'no-progress' -- $argv
+
+# Explicit flags override auto-detection
+if set -q _flag_progress
+    set progress_mode 1
+end
+if set -q _flag_no_progress
+    set progress_mode 0
+end
+
+# In processing loop:
+set current 0
+set total (count $items)
+
+for item in $items
+    set current (math $current + 1)
+
+    if test $progress_mode -eq 1
+        # Non-scrolling in-place update (\r returns to start of line)
+        printf "\r[%d/%d] %s" $current $total "$item" >&2
+    end
+
+    # ... do work ...
+end
+
+# Final newline to complete the progress line
+if test $progress_mode -eq 1
+    printf "\n" >&2
+end
+
+# Summary stats to stderr (always show, even in no-progress mode)
+echo "Results: $valid valid, $invalid invalid" >&2
+```
+
+**Key Points:**
+- Use `printf "\r..."` for non-scrolling in-place updates
+- Progress goes to stderr, not stdout
+- Auto-detect TTY, but allow explicit override
+- Always show final summary statistics
+
+## Pipe Support Standards (REQUIRED FOR DATA-PROCESSING SCRIPTS)
+
+### Design Principles
+
+1. **Composable:** Output should be valid input for similar tools
+2. **Silent on success:** Only output data, not progress (unless --progress)
+3. **No prompts:** Never ask for interactive input in pipe mode
+4. **Handle broken pipes:** Gracefully handle downstream commands exiting early
+
+### Making Scripts Pipe-Friendly
+
+```fish
+# Example: Enable piping between related tools
+cat urls.txt | extract-urls | validate-urls | download-videos
+
+# Each script in the chain:
+# - Reads from stdin OR file
+# - Writes data to stdout
+# - Writes progress/errors to stderr
+# - Uses consistent format (one-per-line or TSV)
+```
+
+### Example Usage Patterns
+
+Add these to your usage() function:
+
+```fish
+echo "Examples:"
+echo "  $SCRIPT_NAME input.txt -o output.txt"
+echo "  cat input.txt | $SCRIPT_NAME"
+echo "  $SCRIPT_NAME < input.txt > output.txt"
+echo "  $SCRIPT_NAME input.txt | other-tool"
+```
+
 ## Best Practices
 
 ### CLI Standards (REQUIRED)
+
+#### Core Flags (All Scripts)
 - **Always include `--help` / `-h` argument** with usage information
 - **Always include `--version` / `-v` argument** showing script version
 - **Always include `--test` argument** that runs unit and regression tests of the code
@@ -152,6 +316,19 @@ logger -t "$(basename "$0")[$$]" -p user.error "action=fail error=\"missing depe
   - Completions must include all flags (--help, --version, --test, --fish-completions, and any script-specific flags)
   - Completions should include context-aware argument completion where applicable
   - Must error if completion file already exists (prevents accidental overwrite)
+
+#### Data-Processing Script Flags (REQUIRED for scripts that process input→output)
+Scripts that process input data and produce output MUST also include:
+- **`-o` / `--output FILE`** - Write output to FILE instead of stdout (default: stdout)
+- **`-a` / `--append`** - Append to output file instead of overwriting (requires -o)
+
+#### Multi-Item Processing Flags (REQUIRED for scripts that iterate over items)
+Scripts that process multiple items or perform long-running operations MUST include:
+- **`--progress`** - Force in-place progress updates (even in batch mode)
+- **`--no-progress`** - Suppress progress updates (even in interactive mode)
+- **Default behavior:** Auto-detect based on `isatty stderr` (interactive = progress on, batch = progress off)
+
+#### General Guidelines
 - Document all command-line options clearly
 - Follow standard Unix conventions for flags and arguments
 
@@ -165,6 +342,50 @@ logger -t "$(basename "$0")[$$]" -p user.error "action=fail error=\"missing depe
 - Make it clear if there are any post-installation setup steps required
 
 ### For Fish Scripts (Preferred)
+
+**CRITICAL:** Fish shell has specific behaviors that differ from bash/zsh. See the comprehensive guide at `~/fish-shell-rules.md` for detailed rules, examples, and bug history from this project.
+
+#### Most Critical Fish-Specific Rules
+
+1. **Variable Scoping**: Use `set -g` (not `set -l`) for variables accessed across functions
+   ```fish
+   # WRONG: set -l urls "..."  # Will be empty in called functions
+   # CORRECT: set -g urls "..."  # Visible everywhere
+   ```
+
+2. **Directory Changes**: Fish `(cd dir && cmd)` does NOT create subshell - always save/restore `$PWD`
+   ```fish
+   # WRONG: (cd "$temp" && process)  # Changes parent directory!
+   # CORRECT: set orig $PWD; cd "$temp"; process; cd "$orig"
+   ```
+
+3. **Multi-line Output**: Use `| string collect` to preserve newlines in command substitution
+   ```fish
+   # WRONG: set output (command)  # Collapses newlines to spaces
+   # CORRECT: set output (command | string collect)
+   ```
+
+4. **stdin Detection**: Always check for empty args before reading stdin
+   ```fish
+   # WRONG: if not isatty stdin  # False positive with redirects
+   # CORRECT: if test (count $argv) -eq 0; and not isatty stdin
+   ```
+
+5. **Array Iteration**: Use direct iteration (never echo/split)
+   ```fish
+   # WRONG: for x in (echo "$array" | string split \n)
+   # CORRECT: for x in $array
+   ```
+
+6. **String Operations**: Use Fish's `string` built-in instead of grep/sed/awk
+   ```fish
+   # WRONG: echo "$text" | grep "pattern"
+   # CORRECT: string match "*pattern*" $text
+   ```
+
+**See `~/fish-shell-rules.md` for complete rules and the commit history showing why these rules exist.**
+
+#### General Fish Best Practices
 - Use `#!/usr/bin/env fish` for portability
 - Include usage/help information with `--help` and `--version` flags
 - Use Fish's built-in error handling and status checks
@@ -476,6 +697,265 @@ done
 log_debug "action=init args=\"$*\""
 main
 ```
+
+### Enhanced Fish Template for Data-Processing Scripts
+
+For scripts that process input and produce output (especially multi-item processing), use this enhanced template:
+
+```fish
+#!/usr/bin/env fish
+
+# Script: process-items
+# Version: 1.0.0
+# Description: Process items from input and output results
+# Installation: Copy to ~/bin/scripts
+
+set VERSION "1.0.0"
+set SCRIPT_NAME (basename (status filename))
+
+# Logging functions
+function log_info
+    logger -t "$SCRIPT_NAME[$fish_pid]" -p user.info $argv
+end
+
+function log_error
+    logger -t "$SCRIPT_NAME[$fish_pid]" -p user.error $argv
+end
+
+function show_version
+    echo "$SCRIPT_NAME version $VERSION"
+    exit 0
+end
+
+function usage
+    echo "Usage: $SCRIPT_NAME [options] [input-file]"
+    echo ""
+    echo "Process items from input and output results."
+    echo ""
+    echo "Arguments:"
+    echo "  input-file            File containing items (default: stdin)"
+    echo ""
+    echo "Options:"
+    echo "  -h, --help            Show this help message"
+    echo "  -v, --version         Show version information"
+    echo "  -o, --output FILE     Output file (default: stdout)"
+    echo "  -a, --append          Append to existing file instead of overwriting"
+    echo "  --progress            Force progress updates (even in batch mode)"
+    echo "  --no-progress         Suppress progress updates (even in interactive mode)"
+    echo "  --test                Run unit and regression tests"
+    echo "  --fish-completions    Install fish shell completions"
+    echo ""
+    echo "Examples:"
+    echo "  $SCRIPT_NAME input.txt -o output.txt"
+    echo "  cat input.txt | $SCRIPT_NAME"
+    echo "  $SCRIPT_NAME input.txt | other-tool"
+    exit 0
+end
+
+function main
+    # I/O configuration
+    set input_file "-"
+    set output_file "-"
+    set append_mode 0
+
+    # Progress configuration (auto-detect TTY)
+    set progress_mode 0
+    if isatty stderr
+        set progress_mode 1
+    end
+
+    # Parse arguments
+    argparse 'h/help' 'v/version' 'o/output=' 'a/append' 'progress' 'no-progress' 'test' 'fish-completions' -- $argv
+    or begin
+        usage
+        exit 2
+    end
+
+    # Handle flags
+    if set -q _flag_help; usage; end
+    if set -q _flag_version; show_version; end
+    if set -q _flag_output; set output_file $_flag_output; end
+    if set -q _flag_append; set append_mode 1; end
+    if set -q _flag_progress; set progress_mode 1; end
+    if set -q _flag_no_progress; set progress_mode 0; end
+
+    # Get input file from remaining arguments
+    if test (count $argv) -gt 0
+        set input_file $argv[1]
+        if test "$input_file" != "-" -a ! -f "$input_file"
+            echo "Error: Input file not found: $input_file" >&2
+            log_error "action=read_input status=not_found file=\"$input_file\""
+            exit 2
+        end
+    end
+
+    # Validate append requires output file
+    if test $append_mode -eq 1 -a "$output_file" = "-"
+        echo "Error: --append requires --output to specify a file" >&2
+        exit 2
+    end
+
+    log_info "action=start input=\"$input_file\" output=\"$output_file\""
+
+    # Read input items
+    if test "$input_file" = "-"
+        set items (cat)
+    else
+        set items (cat $input_file)
+    end
+
+    # Process items with progress
+    set current 0
+    set total (count $items)
+    set results
+
+    for item in $items
+        set current (math $current + 1)
+
+        # Show progress (non-scrolling, in-place update)
+        if test $progress_mode -eq 1
+            printf "\r[%d/%d] Processing: %s" $current $total "$item" >&2
+        end
+
+        # Process item (replace with actual logic)
+        set result (process_item $item)
+        set -a results $result
+    end
+
+    # Complete progress line
+    if test $progress_mode -eq 1
+        printf "\n" >&2
+    end
+
+    # Summary to stderr (always show)
+    echo "Processed $total items" >&2
+
+    # Write output (data to stdout or file)
+    if test "$output_file" = "-"
+        printf "%s\n" $results
+    else
+        if test $append_mode -eq 1
+            printf "%s\n" $results >> "$output_file"
+        else
+            printf "%s\n" $results > "$output_file"
+        end
+    end
+
+    log_info "action=complete status=success count=$total"
+end
+
+function process_item
+    # Replace with actual processing logic
+    echo "processed: $argv[1]"
+end
+
+# Run main
+main $argv
+```
+
+## Common Errors to Avoid
+
+**NOTE:** For Fish-specific errors (variable scoping, directory changes, stdin detection, etc.), see `~/fish-shell-rules.md` which documents recurring bugs from this project's history.
+
+### 1. Mixing Data and Messages on stdout
+**WRONG:**
+```fish
+echo "Processing file..."  # Goes to stdout
+echo "$result"              # Also goes to stdout
+```
+
+**CORRECT:**
+```fish
+echo "Processing file..." >&2  # Messages to stderr
+echo "$result"                 # Data to stdout
+```
+
+### 2. Not Supporting stdin/stdout
+**WRONG:** Only accepting file arguments
+```fish
+cat $argv[1]  # Fails if no file specified
+```
+
+**CORRECT:** Default to stdin/stdout
+```fish
+set input_file "-"
+if test (count $argv) -gt 0
+    set input_file $argv[1]
+end
+```
+
+### 3. Using Relative Paths After `cd`
+**WRONG:**
+```fish
+cd /some/directory
+cat config.txt  # Where is this file now?
+```
+
+**CORRECT:**
+```fish
+# Store original directory or use absolute paths
+set origin_dir (pwd)
+cd /some/directory
+# ... work ...
+cd $origin_dir
+cat config.txt
+```
+
+### 4. Not Checking Exit Codes
+**WRONG:**
+```fish
+curl $url > data.json
+process_file data.json  # What if curl failed?
+```
+
+**CORRECT:**
+```fish
+curl $url > data.json
+if test $status -ne 0
+    log_error "action=download status=failed url=\"$url\""
+    exit 1
+end
+```
+
+### 5. Silent Failures
+**WRONG:**
+```fish
+if not command -v tool
+    exit 1  # User has no idea what happened
+end
+```
+
+**CORRECT:**
+```fish
+if not command -v tool
+    echo "Error: 'tool' is not installed" >&2
+    echo "Install with: brew install tool" >&2
+    log_error "action=dependency_check status=missing tool=tool"
+    exit 3
+end
+```
+
+### 6. Not Validating Flag Combinations
+**WRONG:** Allowing `--append` without `--output`
+```fish
+# Should validate that append mode requires a file
+```
+
+**CORRECT:**
+```fish
+if test $append_mode -eq 1 -a "$output_file" = "-"
+    echo "Error: --append requires --output to specify a file" >&2
+    exit 2
+end
+```
+
+### 7. Interactive Prompts in Pipeable Scripts
+**WRONG:** Asking for user input in a data-processing script
+```fish
+read -P "Continue? (y/n): " answer
+```
+
+**CORRECT:** Use flags for all options, avoid prompts in pipe-friendly scripts
 
 ## Troubleshooting
 
