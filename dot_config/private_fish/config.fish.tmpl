@@ -87,6 +87,7 @@ abbr --add ccr "claude --resume"
 abbr --add ccc "claude --continue"
 abbr --add ccf "claude --continue --fork-session"
 abbr --add ccd "claude --dangerously-skip-permissions"
+abbr --add ccdr "claude --dangerously-skip-permissions --resume"
 
 # Claude Code model shortcuts
 abbr --add opus "claude --model opus"
@@ -135,3 +136,7 @@ set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; se
 # Fix issue with fisher being committed to the repo
 ## See https://github.com/jorgebucaran/fisher/pull/746
 set -U _fisher_plugins (cat $__fish_config_dir/fish_plugins)
+
+# Added by LM Studio CLI (lms)
+set -gx PATH $PATH {{ .chezmoi.homeDir -}}/.lmstudio/bin
+# End of LM Studio CLI section
