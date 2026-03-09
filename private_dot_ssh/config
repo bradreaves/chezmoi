@@ -1,3 +1,8 @@
+# Added by OrbStack: 'orb' SSH host for Linux machines
+# This only works if it's at the top of ssh_config (before any Host blocks).
+# This won't be added again if you remove it.
+Include ~/.orbstack/ssh/config
+
 # Documentation: https://www.man7.org/linux/man-pages/man5/ssh_config.5.html
 
 Host *
@@ -19,6 +24,18 @@ Host huff
     User root
     ProxyJump minerva
 
+#  ========== Enterprise GitHub ==========
+
+
+# To clone from the NC-State Github, replace the 
+# domain from "github.com" to "ncsu-gh" like so:
+# ```git clone git@ncsu-gh:seconduser/repo.git```
+
+Host ncsu-gh
+    HostName github.com
+    User     git
+    IdentityFile ~/.ssh/ncsu_github
+    IdentitiesOnly Yes # Only uses ncsu key
 
 # ========== Bastions and Tunnels ==========
 
