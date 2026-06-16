@@ -13,8 +13,8 @@ $out_dir = "./build/"; # Output files in /build
 # Use this on a final run to make sure we deal with all warnings
 # $warnings_as_errors
 
-# use pdf latex directly
-$pdf_mode = 1;
+# use lualatex
+$pdf_mode = 4;
 
 # cut run noise
 $silent = 1;

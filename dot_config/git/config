@@ -20,3 +20,9 @@
 	path = ~/.config/git/config-github
 [includeIf "hasconfig:remote.*.url:https://github.com/**"]
 	path = ~/.config/git/config-github
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential

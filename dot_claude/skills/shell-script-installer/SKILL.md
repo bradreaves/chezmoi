@@ -67,6 +67,7 @@ Follow these steps in order:
 - Ask the user if they want to test the script before committing
 - Make the script executable: `chmod +x ~/bin/scripts/<script-name>`
 - Offer a test command or let them test manually
+- **Test under realistic stdin/TTY conditions** — see "Testing Under Realistic stdin/TTY Conditions" below. An AI agent's Bash tool typically runs scripts with stdin redirected from `/dev/null` (or another pipe), which silently hides whole classes of bugs. If the script will be invoked interactively by a human, it MUST be tested that way before declaring it working.
 - Review test results with the user
 - If tests fail, go back to iteration (step 5)
 
@@ -427,6 +428,46 @@ Scripts that process multiple items or perform long-running operations MUST incl
   - All command-line flags and options
 - Verify structured logging outputs correct levels and formats
 - Test with both valid and invalid inputs
+- **Test under realistic stdin/TTY conditions** — see next section.
+
+### Testing Under Realistic stdin/TTY Conditions
+
+**The single biggest source of "works in CI / hangs in real life" bugs.**
+
+When an AI agent runs a script via the Bash tool, the script's stdin is usually `/dev/null` (or another pipe), and stdout/stderr are pipes — not a terminal. A script that the user will run interactively at the terminal sees something completely different: stdin/stdout/stderr are all attached to a TTY. Several common failure modes only surface on the real TTY:
+
+- `(cat | string collect)` inside a fish function called from a pipeline reads the **controlling TTY**, not the function's piped stdin → hangs forever waiting for Ctrl-D.
+- `read -P "..." answer` blocks indefinitely if the script ends up wired to a non-interactive stdin.
+- `isatty stdin` returns different things, which can flip code paths (auto-detect of progress, paging, prompts).
+- Editor-spawning logic (e.g. `$EDITOR $tmpfile`) needs a real TTY to function; agent test runs may either hang on a vim that can't draw, or quietly skip the step.
+- Output formatting that depends on `tput cols` or `isatty stdout` looks right in agent runs and broken when piped (or vice versa).
+
+**How to test correctly.** Match the invocation context to the script's intended use:
+
+| Intended use | Correct test invocation |
+|---|---|
+| Human runs in terminal | User runs it themselves in their real shell, OR allocate a PTY (see below) |
+| Piped into / out of (`a \| script \| b`) | Test with the actual pipe in place, both ends |
+| Cron / launchd / CI | Test with stdin from `/dev/null`, no TTY |
+| Mixed (interactive + pipe-friendly) | Test BOTH paths — they exercise different code |
+
+**Allocating a PTY from an agent context.** If you (the AI) need to verify TTY-bound behavior yourself without the user, use `script(1)` (BSD/macOS variant) or `expect`/`unbuffer` to allocate a pseudo-terminal:
+
+```bash
+# macOS/BSD: -q quiet, -t 0 no timing file, runs cmd under a PTY
+script -q /dev/null my-script --some-flag </dev/null
+
+# Or, if `expect` is installed:
+unbuffer my-script --some-flag
+```
+
+**What to actually verify in a TTY-mode test:**
+1. Script doesn't hang. Set an explicit timeout in the test wrapper (e.g. `timeout 30 script -q /dev/null ./my-script`) so a hang fails the test instead of stalling forever.
+2. If the script reads stdin from a pipeline upstream of itself, confirm that stdin actually reaches the consumer — `lsof -p <pid>` on a hung process to inspect fd 0 is the definitive diagnostic.
+3. Multi-line output that the user will see (commit messages, generated files, prompts) round-trips with newlines intact. Verify with `od -c` or `cat -e`, not by eye — fish list-join collapses `\n` to space and it's easy to miss in normal output.
+4. If the script spawns `$EDITOR`, test with `EDITOR=true` (succeeds, file unchanged) and a fake editor that mutates the file, to ensure both paths work.
+
+**The mindset:** before declaring a script done, ask "what is stdin/stdout/stderr in the real invocation, and have I actually tested that configuration?" If the only test was `cmd > /dev/null 2>&1 < /dev/null` from inside an agent, the answer is no.
 
 ## Example Script Templates
 

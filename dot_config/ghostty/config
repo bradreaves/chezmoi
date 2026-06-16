@@ -45,3 +45,4 @@ font-size  = 16
 keybind = shift+enter=text:\n
 
 shell-integration-features = ssh-terminfo,ssh-env
+theme = "rose pine"
