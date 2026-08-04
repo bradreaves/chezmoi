@@ -11,3 +11,9 @@ variables:
   papersize: letter
   fontsize: 11pt
   urlstyle: tt
+  # Workaround: for captionless tables pandoc emits \def\LTcaptype{none},
+  # but longtable (TeX Live 2025+) suppresses numbering only when \LTcaptype
+  # is *empty* and otherwise does \refstepcounter{none} -> "No counter 'none'
+  # defined". Defining a dummy counter makes that step harmless.
+  header-includes:
+    - \newcounter{none}
