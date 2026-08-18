@@ -117,8 +117,9 @@ Follow these steps in order:
 ### Log Level Mapping
 Map script events to appropriate log levels:
 
-- **`user.info`**: Process status, file operations, success events
+- **`user.notice`**: Process status, file operations, success events
   - Example: "Processing file", "Operation completed successfully"
+  - **Use this, not `user.info`** -- see retention below.
 
 - **`user.warning`**: Unsupported formats, non-critical issues, recoverable errors
   - Example: "Unsupported file format", "Feature not available"
@@ -128,20 +129,104 @@ Map script events to appropriate log levels:
 
 - **`user.debug`**: File creation, skipped files, detailed operations
   - Example: "Created directory", "Skipping cached file"
+  - Live-stream only. Pair it with a `--debug` flag (below) so the operator
+    has a way to see it without a second terminal.
+
+### What macOS Actually Retains
+
+**CRITICAL:** Priority determines whether a message can be read back later.
+Verified on macOS 15 (Darwin 24.6):
+
+| Priority | Unified level | Retrievable afterward? |
+|---|---|---|
+| `notice`, `warning`, `err`, `error`, `crit` | default (`Df`) | **Yes** -- plain `log show`, weeks later |
+| `info` | info (`I`) | **No** -- memory-only, evicted in minutes; needs `--info` even when fresh |
+| `debug` | debug (`Db`) | **No** -- absent from `log show` at any flag; visible only in `log stream --level debug` |
+
+This is why status logging uses `user.notice`. A script that logs its normal
+operation at `user.info` is writing diagnostics nobody can ever read back --
+it fails silently, since `logger` reports success either way.
+
+**Two traps when checking whether logging works:**
+
+1. `log show` hides info-level messages unless you pass `--info`. An empty
+   result is not proof that nothing was logged.
+2. **`log` is a zsh builtin.** Under zsh a bare `log show ...` fails with
+   `zsh:log:1: too many arguments` and prints nothing -- which looks exactly
+   like "no matching entries". Always invoke `/usr/bin/log` explicitly in
+   scripts, tooling, and agent tool calls. (Interactive fish resolves `log`
+   to `/usr/bin/log` correctly, so this only bites non-fish contexts.)
+
+**Known limitation (macOS only):** the `-t` tag is discarded by unified
+logging. Messages surface as process `logger`, and no field preserves
+`scriptname[PID]` -- so the tag cannot be used as a filter. This is a platform
+difference, not a bug: on Linux the tag is a first-class field (journald's
+`SYSLOG_IDENTIFIER`, so `journalctl -t web2md` works), which is where the
+`scriptname[PID]` convention comes from. macOS's model identifies messages by
+subsystem, category and process, and there is no CLI route to set a subsystem
+-- `logger`'s whole flag set is `[-is] [-f file] [-p pri] [-t tag]`.
+
+The macOS man page is misleading here: it still describes `logger` as an
+interface to `syslog(3)` and promises `-t` will "mark every line in the log",
+describing a system macOS has not used since 10.12.
+
+So on macOS the script name has to ride in the message body. Gate it on the OS
+so the prefix does not become redundant noise on Linux (see the templates
+below), then filter with either:
+
+```fish
+/usr/bin/log show --last 1h --predicate 'eventMessage BEGINSWITH "script=web2md"'
+journalctl -t web2md      # Linux, using the tag directly
+```
 
 ### Logging Examples
 
 **Fish:**
 ```fish
-logger -t (basename (status filename))"[$fish_pid]" -p user.info "action=start status=processing"
+logger -t (basename (status filename))"[$fish_pid]" -p user.notice "action=start status=processing"
 logger -t (basename (status filename))"[$fish_pid]" -p user.error "action=fail error=\"missing dependency\""
 ```
 
 **Bash:**
 ```bash
-logger -t "$(basename "$0")[$$]" -p user.info "action=start status=processing"
+logger -t "$(basename "$0")[$$]" -p user.notice "action=start status=processing"
 logger -t "$(basename "$0")[$$]" -p user.error "action=fail error=\"missing dependency\""
 ```
+
+**Reading them back:**
+```fish
+/usr/bin/log show --last 1h --predicate 'process == "logger"' --style syslog
+/usr/bin/log stream --level debug --predicate 'process == "logger"'  # includes debug
+```
+
+### The `--debug` Flag (REQUIRED)
+
+Every script takes `--debug` (short form `-d` unless already claimed), which
+routes debug output to stderr immediately instead of relying on a live stream:
+
+```fish
+function log_debug
+    test "$DEBUG" = 1; and echo "[debug] $argv" >&2
+    logger -t "$SCRIPT_NAME[$fish_pid]" -p user.debug "$LOG_TAG$argv"
+end
+```
+
+Set the global right after argument parsing:
+
+```fish
+argparse 'h/help' 'v/version' 'test' 'd/debug' 'fish-completions' -- $argv
+
+if set -q _flag_debug
+    set -g DEBUG 1
+end
+```
+
+The `logger` call stays unconditional: a script that runs unattended (launchd,
+a watcher, a cron job) cannot be handed `--debug`, and the live stream is the
+only way to observe it. Document the flag in `usage` and in the generated fish
+completions like any other option. If the script forwards unrecognized
+arguments to another tool, consume `--debug` during parsing so it is not
+passed through.
 
 ## Input/Output Standards (REQUIRED FOR DATA-PROCESSING SCRIPTS)
 
@@ -484,16 +569,26 @@ unbuffer my-script --some-flag
 set VERSION "1.0.0"
 set SCRIPT_NAME (basename (status filename))
 
+# macOS unified logging discards logger's -t tag, so the script name has to
+# ride in the message body instead. Linux keeps the tag (journald
+# SYSLOG_IDENTIFIER), where this prefix would be redundant.
+if test (uname) = Darwin
+    set -g LOG_TAG "script=$SCRIPT_NAME "
+else
+    set -g LOG_TAG ""
+end
+
 function log_info
-    logger -t "$SCRIPT_NAME[$fish_pid]" -p user.info $argv
+    logger -t "$SCRIPT_NAME[$fish_pid]" -p user.notice "$LOG_TAG$argv"
 end
 
 function log_error
-    logger -t "$SCRIPT_NAME[$fish_pid]" -p user.error $argv
+    logger -t "$SCRIPT_NAME[$fish_pid]" -p user.error "$LOG_TAG$argv"
 end
 
 function log_debug
-    logger -t "$SCRIPT_NAME[$fish_pid]" -p user.debug $argv
+    test "$DEBUG" = 1; and echo "[debug] $argv" >&2
+    logger -t "$SCRIPT_NAME[$fish_pid]" -p user.debug "$LOG_TAG$argv"
 end
 
 function show_version
@@ -534,6 +629,7 @@ function install_fish_completions
 
 # Complete flags
 complete -c $SCRIPT_NAME -s h -l help -d 'Show help message'
+complete -c $SCRIPT_NAME -s d -l debug -d 'Print debug output to stderr'
 complete -c $SCRIPT_NAME -s v -l version -d 'Show version information'
 complete -c $SCRIPT_NAME -l test -d 'Run unit and regression tests'
 complete -c $SCRIPT_NAME -l fish-completions -d 'Install fish shell completions'
@@ -562,6 +658,7 @@ function usage
     echo "Description: What this script does"
     echo ""
     echo "Options:"
+    echo "  -d, --debug           Print debug output to stderr"
     echo "  -h, --help            Show this help message"
     echo "  -v, --version         Show version information"
     echo "  --test                Run unit and regression tests"
@@ -579,9 +676,13 @@ function main
 end
 
 # Parse arguments
-argparse 'h/help' 'v/version' 'test' 'fish-completions' -- $argv
+argparse 'h/help' 'v/version' 'test' 'd/debug' 'fish-completions' -- $argv
 or begin
     usage
+end
+
+if set -q _flag_debug
+    set -g DEBUG 1
 end
 
 if set -q _flag_help
@@ -618,16 +719,27 @@ set -e
 VERSION="1.0.0"
 SCRIPT_NAME="$(basename "$0")"
 
+# macOS unified logging discards logger's -t tag, so the script name has to
+# ride in the message body instead. Linux keeps the tag (journald
+# SYSLOG_IDENTIFIER), where this prefix would be redundant. $OSTYPE avoids a
+# fork; use [ "$(uname)" = Darwin ] in a plain sh script.
+if [[ "$OSTYPE" == darwin* ]]; then
+    LOG_TAG="script=${SCRIPT_NAME} "
+else
+    LOG_TAG=""
+fi
+
 log_info() {
-    logger -t "${SCRIPT_NAME}[$$]" -p user.info "$@"
+    logger -t "${SCRIPT_NAME}[$$]" -p user.notice "${LOG_TAG}$*"
 }
 
 log_error() {
-    logger -t "${SCRIPT_NAME}[$$]" -p user.error "$@"
+    logger -t "${SCRIPT_NAME}[$$]" -p user.error "${LOG_TAG}$*"
 }
 
 log_debug() {
-    logger -t "${SCRIPT_NAME}[$$]" -p user.debug "$@"
+    [ "$DEBUG" = 1 ] && echo "[debug] $*" >&2
+    logger -t "${SCRIPT_NAME}[$$]" -p user.debug "${LOG_TAG}$*"
 }
 
 show_version() {
@@ -669,6 +781,7 @@ install_fish_completions() {
 
 # Complete flags
 complete -c $SCRIPT_NAME -s h -l help -d 'Show help message'
+complete -c $SCRIPT_NAME -s d -l debug -d 'Print debug output to stderr'
 complete -c $SCRIPT_NAME -s v -l version -d 'Show version information'
 complete -c $SCRIPT_NAME -l test -d 'Run unit and regression tests'
 complete -c $SCRIPT_NAME -l fish-completions -d 'Install fish shell completions'
@@ -696,6 +809,7 @@ usage() {
     echo "Description: What this script does"
     echo ""
     echo "Options:"
+    echo "  -d, --debug           Print debug output to stderr"
     echo "  -h, --help            Show this help message"
     echo "  -v, --version         Show version information"
     echo "  --test                Run unit and regression tests"
@@ -754,13 +868,22 @@ For scripts that process input and produce output (especially multi-item process
 set VERSION "1.0.0"
 set SCRIPT_NAME (basename (status filename))
 
+# macOS unified logging discards logger's -t tag, so the script name has to
+# ride in the message body instead. Linux keeps the tag (journald
+# SYSLOG_IDENTIFIER), where this prefix would be redundant.
+if test (uname) = Darwin
+    set -g LOG_TAG "script=$SCRIPT_NAME "
+else
+    set -g LOG_TAG ""
+end
+
 # Logging functions
 function log_info
-    logger -t "$SCRIPT_NAME[$fish_pid]" -p user.info $argv
+    logger -t "$SCRIPT_NAME[$fish_pid]" -p user.notice "$LOG_TAG$argv"
 end
 
 function log_error
-    logger -t "$SCRIPT_NAME[$fish_pid]" -p user.error $argv
+    logger -t "$SCRIPT_NAME[$fish_pid]" -p user.error "$LOG_TAG$argv"
 end
 
 function show_version
@@ -777,6 +900,7 @@ function usage
     echo "  input-file            File containing items (default: stdin)"
     echo ""
     echo "Options:"
+    echo "  -d, --debug           Print debug output to stderr"
     echo "  -h, --help            Show this help message"
     echo "  -v, --version         Show version information"
     echo "  -o, --output FILE     Output file (default: stdout)"
@@ -806,13 +930,17 @@ function main
     end
 
     # Parse arguments
-    argparse 'h/help' 'v/version' 'o/output=' 'a/append' 'progress' 'no-progress' 'test' 'fish-completions' -- $argv
+    argparse 'h/help' 'v/version' 'o/output=' 'a/append' 'progress' 'no-progress' 'test' 'd/debug' 'fish-completions' -- $argv
     or begin
         usage
         exit 2
     end
 
     # Handle flags
+    if set -q _flag_debug
+        set -g DEBUG 1
+    end
+
     if set -q _flag_help; usage; end
     if set -q _flag_version; show_version; end
     if set -q _flag_output; set output_file $_flag_output; end
