@@ -63,6 +63,15 @@ Host wsprfw-tunnel
     # Below says "don't open a shell for this"
     SessionType none
 
+# ========== WSPR Switches ==========
+#
+Host sw03
+    Hostname eb2-2291-sw03.csc.ncsu.edu
+    User bgreaves
+    IdentityFile ~/.ssh/wspr-infra
+    IdentitiesOnly Yes
+
+
 # ========== WSPR Servers ==========
 
 Host rvx54
@@ -147,6 +156,20 @@ Host sophia
     User bgr
     SetEnv TERM=xterm-256color
 
+Host openclaw
+    Hostname openclaw.cqr.fyi
+    User bgr
+
+Host openclaw-oc
+    Hostname openclaw.cqr.fyi
+    User bgr
+    RequestTTY yes
+    RemoteCommand sudo -iu openclaw
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    ControlMaster auto
+    ControlPath ~/.ssh/cm-%r@%h:%p
+    ControlPersist 10m
 
 #  ========== Tailnet ==========
 Host ts-pve1
@@ -168,6 +191,9 @@ Host ts-sophia
     Hostname sophia.llama-bass.ts.net
     User bgr
 
+Host ts-openclaw
+    Hostname openclaw.llama-bass.ts.net
+    User bgr
 
 #  ========== Workstations ==========
 
