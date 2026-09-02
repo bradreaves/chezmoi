@@ -195,6 +195,9 @@ Host ts-openclaw
     Hostname openclaw.llama-bass.ts.net
     User bgr
 
+Host workbox
+    Hostname workbox.llama-bass.ts.net
+
 #  ========== Workstations ==========
 
 Host 23macmini
