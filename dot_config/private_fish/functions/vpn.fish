@@ -5,13 +5,13 @@ function vpn
     switch $argv[1]
         case 'up' 'on'
             echo "VPN is going up"
-            sudo tailscale set --exit-node="us-rag-wg-103.mullvad.ts.net" 
+            sudo tailscale set --exit-node="us-nyc-wg-001.mullvad.ts.net"
         case 'down' 'off'
             echo "VPN is going down"
             sudo tailscale set --exit-node="" 
         case 'status' '*'
     end
-    echo -n "Current outside DNS is: " 
+    echo -n "Current outside DNS is: "
     set_color red
     echo (rdns (myip))
     set_color normal
