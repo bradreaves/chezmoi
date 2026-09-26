@@ -34,7 +34,7 @@ Host huff
 Host ncsu-gh
     HostName github.com
     User     git
-    IdentityFile ~/.ssh/ncsu_github.pub
+    IdentityFile ~/.ssh/ncsu_github
     IdentitiesOnly Yes # Only uses ncsu key
 
 # ========== Bastions and Tunnels ==========
