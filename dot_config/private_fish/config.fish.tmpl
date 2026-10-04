@@ -2,6 +2,19 @@
 ## To edit, exit and run `chezmoi edit config.fish`
 
 if status is-interactive
+    if test "$TERM" = dumb
+        set -g fish_greeting
+
+        function fish_prompt
+            echo -n '$ '
+        end
+
+        function fish_right_prompt
+        end
+
+        return
+    end
+
     # Commands to run in interactive sessions can go here
     #set fish_trace true
     {{- if eq .chezmoi.hostname "ainos" }}
