@@ -1,20 +1,13 @@
 ## WARNING: THIS FILE IS MANAGED AS A CHEZMOI TEMPLATE
 ## To edit, exit and run `chezmoi edit config.fish`
 
+if test "$TERM" = dumb; and status is-interactive
+    # Fish 4 still writes terminal protocol sequences after the prompt. TRAMP
+    # cannot use those, so use a minimal interactive shell for dumb terminals.
+    exec /bin/sh -i
+end
+
 if status is-interactive
-    if test "$TERM" = dumb
-        set -g fish_greeting
-
-        function fish_prompt
-            echo -n '$ '
-        end
-
-        function fish_right_prompt
-        end
-
-        return
-    end
-
     # Commands to run in interactive sessions can go here
     #set fish_trace true
     {{- if eq .chezmoi.hostname "ainos" }}
