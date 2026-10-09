@@ -13,8 +13,14 @@ $out_dir = "./build/"; # Output files in /build
 # Use this on a final run to make sure we deal with all warnings
 # $warnings_as_errors
 
-# use lualatex
-$pdf_mode = 4;
+# use pdf latex directly
+$pdf_mode = 1;
+
+# enable SyncTeX data (-synctex=1 is passed to pdflatex)
+$pdflatex = 'pdflatex -synctex=1 -interaction=nonstopmode %O %S';
+
+# latexmk writes the SyncTeX file to build/; copy it to the root so previewers find it there
+$success_cmd = 'cp -f %W/%R.synctex.gz .';
 
 # cut run noise
 $silent = 1;
