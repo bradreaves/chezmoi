@@ -1,0 +1,12 @@
+* Spacemacs Reminders
+
+** Interaction
+
+- Cancel Anything :: ~C-g~ or type ~nt~ really fast -- like a flam.
+  - This isn't quite working yet
+  -
+
+
+** Documentation
+
+- Orgmode Guide :: In the info browser. ~SPC h i~ then search for ~org~

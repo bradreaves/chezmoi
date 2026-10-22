@@ -41,18 +41,24 @@ This function should only modify configuration layer settings."
      ;; ----------------------------------------------------------------
      ;; auto-completion
      ;; better-defaults
+     bibtex
      ;;claude-code
+     (agent-shell :variables
+                  agent-shell-layer-configure-fn #'brad/agent-shell-configure)
      emacs-lisp
      git
+     helm
      (llm-client :variables
                  llm-client-enable-gptel t
                  llm-client-enable-gptel-agent t)
-     helm
      ;; lsp
+     latex
      markdown
      ;; multiple-cursors
      org
      osx
+     pandoc
+     pdf
      spacemacs-layouts
      spacemacs-visual
      ;;(shell :variables
@@ -80,7 +86,8 @@ This function should only modify configuration layer settings."
      )
 
    ;; A list of packages that cannot be updated.
-   dotspacemacs-frozen-packages '()
+   ;; Keep the reviewed agent packages until explicitly updated.
+   dotspacemacs-frozen-packages '(agent-shell acp shell-maker)
 
    ;; A list of packages that will not be installed and loaded.
    dotspacemacs-excluded-packages '(code-review)
@@ -560,7 +567,6 @@ It should only modify the values of Spacemacs settings."
    ;; visiting README.org files of Spacemacs.
    ;; (default nil)
    dotspacemacs-pretty-docs nil
-
    ;; If nil the home buffer shows the full path of agenda items
    ;; and todos. If non-nil only the file name is shown.
    dotspacemacs-home-shorten-agenda-source nil
@@ -606,8 +612,13 @@ before packages are loaded."
   (setq ghostel-point-leave-input-mode     'emacs
         ghostel-mark-activation-input-mode 'emacs
         ghostel-mouse-drag-input-mode      'emacs)
-  (setq treemacs-user-mode-line-format '("%e" (:eval (spaceline-ml-treemacs))))
+  ;;(setq treemacs-user-mode-line-format '("%e" (:eval (spaceline-ml-treemacs))))
   (unless (cdr command-line-args) (setq initial-buffer-choice "~/.emacs.d/private/splash.org"))
+
+  ;; AUCTeX
+  (setq-default TeX-master "main")
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t)
 
   ;; Rose Pine palette for ghostel buffers, mirrored from the Ghostty theme at
   ;; /Applications/Ghostty.app/Contents/Resources/ghostty/themes/Rose Pine
@@ -668,15 +679,16 @@ This function is called at the very end of Spacemacs initialization."
    '(package-selected-packages
      '(ace-link add-node-modules-path afternoon-theme aggressive-indent alect-themes
                 all-the-icons all-the-icons-nerd-fonts ample-theme ample-zen-theme
-                anti-zenburn-theme apropospriate-theme auto-compile
-                auto-highlight-symbol autothemer avy-jump-helm-line badwolf-theme
-                birds-of-paradise-plus-theme bubbleberry-theme bui busybee-theme
-                centaur-tabs centered-cursor-mode cherry-blossom-theme
-                chocolate-theme clean-aindent-mode clues-theme
-                color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow
-                column-enforce-mode company cyberpunk-theme dakrone-theme dap-mode
-                darkmine-theme darkokai-theme darktooth-theme define-word devdocs
-                diminish dired-quick-sort disable-mouse django-theme doom-themes
+                anti-zenburn-theme apropospriate-theme auctex auctex-latexmk
+                auto-compile auto-highlight-symbol autothemer avy-jump-helm-line
+                badwolf-theme birds-of-paradise-plus-theme bubbleberry-theme bui
+                busybee-theme centaur-tabs centered-cursor-mode
+                cherry-blossom-theme chocolate-theme clean-aindent-mode
+                clues-theme color-theme-sanityinc-solarized
+                color-theme-sanityinc-tomorrow column-enforce-mode company
+                cyberpunk-theme dakrone-theme dap-mode darkmine-theme
+                darkokai-theme darktooth-theme define-word devdocs diminish
+                dired-quick-sort disable-mouse django-theme doom-themes
                 dotenv-mode dracula-theme drag-stuff dumb-jump eat edit-indirect
                 ef-themes elisp-def elisp-demos elisp-slime-nav ellama emr
                 esh-help eshell-prompt-extras eshell-z espresso-theme eval-sexp-fu
@@ -684,8 +696,8 @@ This function is called at the very end of Spacemacs initialization."
                 evil-easymotion evil-escape evil-evilified-state evil-exchange
                 evil-ghostel evil-goggles evil-iedit-state evil-indent-plus
                 evil-lion evil-lisp-state evil-matchit evil-mc evil-nerd-commenter
-                evil-numbers evil-org evil-surround evil-textobj-line evil-tutor
-                evil-unimpaired evil-visual-mark-mode evil-visualstar
+                evil-numbers evil-org evil-surround evil-tex evil-textobj-line
+                evil-tutor evil-unimpaired evil-visual-mark-mode evil-visualstar
                 exotica-theme expand-region eyebrowse eziam-themes fancy-battery
                 farmhouse-themes fish-mode flatland-theme flatui-theme flycheck
                 flycheck-bashate gandalf-theme ggtags gh-md ghostel gnuplot
@@ -701,15 +713,16 @@ This function is called at the very end of Spacemacs initialization."
                 jbeans-theme js-doc js2-mode js2-refactor kaolin-themes
                 kusanagi-theme light-soap-theme link-hint livid-mode llm
                 lorem-ipsum lsp-docker lsp-mode lsp-treemacs lush-theme macrostep
-                madhat2r-theme markdown-toc material-theme minimal-theme
-                modus-themes moe-theme molokai-theme monochrome-theme
-                monokai-theme multi-line multi-term multi-vterm multiple-cursors
-                mustang-theme nameless naquadah-theme nerd-icons noctilux-theme
-                nodejs-repl npm-mode obsidian-theme occidental-theme oldlace-theme
-                omtose-phellack-themes open-junk-file orderless org-cliplink
-                org-contrib org-download org-mime org-pomodoro org-present
-                org-projectile org-rich-yank org-superstar organic-green-theme
-                overseer page-break-lines paradox password-generator pcre2el
+                madhat2r-theme markdown-toc material-theme math-symbol-lists
+                minimal-theme modus-themes moe-theme molokai-theme
+                monochrome-theme monokai-theme multi-line multi-term multi-vterm
+                multiple-cursors mustang-theme nameless naquadah-theme nerd-icons
+                noctilux-theme nodejs-repl npm-mode obsidian-theme
+                occidental-theme oldlace-theme omtose-phellack-themes
+                open-junk-file orderless org-cliplink org-contrib org-download
+                org-mime org-pomodoro org-present org-projectile org-rich-yank
+                org-superstar organic-green-theme overseer page-break-lines
+                paradox password-generator pcre2el pdf-tools pdf-view-restore
                 phoenix-dark-mono-theme phoenix-dark-pink-theme planet-theme plz
                 plz-event-source plz-media-type popwin prettier-js
                 professional-theme purple-haze-theme quickrun railscasts-theme
@@ -720,9 +733,9 @@ This function is called at the very end of Spacemacs initialization."
                 spacemacs-purpose-popwin spacemacs-whitespace-cleanup
                 string-edit-at-point string-inflection subatomic-theme
                 subatomic256-theme sublime-themes sunny-day-theme symbol-overlay
-                symon tango-2-theme tango-plus-theme tangotango-theme tao-theme
-                term-cursor terminal-here tern toc-org toxi-theme transient
-                treemacs-evil treemacs-icons-dired treemacs-persp
+                symon tablist tango-2-theme tango-plus-theme tangotango-theme
+                tao-theme term-cursor terminal-here tern toc-org toxi-theme
+                transient treemacs-evil treemacs-icons-dired treemacs-persp
                 treemacs-projectile twilight-anti-bright-theme
                 twilight-bright-theme twilight-theme ujelly-theme underwater-theme
                 undo-fu-session uuidgen vi-tilde-fringe volatile-highlights vterm

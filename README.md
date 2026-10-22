@@ -12,7 +12,7 @@ This uses `chezmoi` to install and maintain my dotfiles.
 
  1. Install [Homebrew](https://brew.sh)
  2. Install `chezmoi`: ```/opt/homebrew/bin/brew install chezmoi```
- 3. Init and  apply dotfiles: ```/opt/homebrew/bin/chezmoi init bradreaves/chezmoi --apply```
+ 3. If restoring Spacemacs, clone its distribution first as described below. Init and apply dotfiles: ```/opt/homebrew/bin/chezmoi init bradreaves/chezmoi --apply```
  4. Install Homebrew packages: ```/opt/homebrew/bin/brew bundle install --file ~/.config/Brewfile```
  5. Check that `/opt/homebrew/bin/fish` is installed correctly
  6. Add `/opt/homebrew/bin/fish` to /etc/shells
@@ -32,4 +32,30 @@ This uses `chezmoi` to install and maintain my dotfiles.
 13. Add 1Blocker, Bitwarden, Pocket, and Zotero plugins to browser
 14. Setup Zotero sync and install BetterBibTool
 15. Setup Lunar and Stats
+
+## Restore Spacemacs
+
+On a fresh machine, clone the Spacemacs distribution **before applying these
+dotfiles**, so its checkout exists before chezmoi creates the private layer files:
+
+```sh
+git clone --branch develop https://github.com/syl20bnr/spacemacs.git "$HOME/.emacs.d"
+```
+
+Install Emacs, Node.js/npm, and the Claude and Codex CLIs. Chezmoi restores
+`~/.spacemacs`, the customized `agent-shell` layer, its adapter manifests, and
+`~/.emacs.d/private/splash.org`. Spacemacs installs the declared Emacs packages
+when it starts.
+
+After applying the dotfiles, reinstall the local ACP adapters from their lockfile:
+
+```sh
+cd "$HOME/.emacs.d/private/agent-shell/local/adapters"
+npm ci --ignore-scripts
+```
+
+The adapters use the existing Claude and Codex CLI logins. Complete those logins
+on the new machine; credentials are not stored in these dotfiles. Generated
+`node_modules`, installed Emacs packages, caches, and session state are not managed
+here.
 
