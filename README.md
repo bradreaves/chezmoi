@@ -33,6 +33,13 @@ This uses `chezmoi` to install and maintain my dotfiles.
 14. Setup Zotero sync and install BetterBibTool
 15. Setup Lunar and Stats
 
+## Restore Codex
+
+The portable Codex config and global instructions are managed here. Follow the
+[Codex restore guide](.docket/2026-10-23-codex-restore.md) for dependencies, local
+plugin repositories, credential recovery, and verification before applying the
+config. Existing credentials and app-generated integration state are excluded.
+
 ## Restore Spacemacs
 
 On a fresh machine, clone the Spacemacs distribution **before applying these
