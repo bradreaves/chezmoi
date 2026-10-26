@@ -33,6 +33,33 @@ This uses `chezmoi` to install and maintain my dotfiles.
 14. Setup Zotero sync and install BetterBibTool
 15. Setup Lunar and Stats
 
+## Restore Tailscale on macOS
+
+The Brewfile installs the standalone desktop app using `cask "tailscale-app"`.
+Use that app's bundled CLI; the restore list excludes the separate `tailscale`
+formula and the Mac App Store app.
+
+On the fresh system, open Tailscale, sign in, and approve its system extension
+and VPN setup. In Tailscale Settings, find **CLI integration**, select **Show
+me how**, then **Install Now**. This installs the launcher at
+`/usr/local/bin/tailscale`.
+
+Verify in a new terminal:
+
+```sh
+command -v tailscale
+tailscale version
+tailscale status
+```
+
+The command should resolve to `/usr/local/bin/tailscale`. Do not restore the
+old `homebrew.mxcl.tailscale` daemon definition. This choice is for the fresh
+OS install; the current laptop's Tailscale installation has not been migrated.
+
+See the official [macOS variants](https://tailscale.com/docs/concepts/macos-variants)
+and [CLI integration](https://tailscale.com/docs/reference/tailscale-cli?tab=macos)
+instructions.
+
 ## Shared agent skills
 
 The Shell Script Installer skill is stored once under
