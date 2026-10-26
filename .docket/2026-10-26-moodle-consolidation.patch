@@ -1,0 +1,138 @@
+--- a/plugins/lms/skills/lms-admin/SKILL.md
++++ b/plugins/lms/skills/lms-admin/SKILL.md
+@@ -1,6 +1,6 @@
+ ---
+ name: lms-admin
+-description: Use when creating, editing, re-dating, moving, hiding, renaming, or deleting course items (assignments, sections/modules) in a learning management system — Moodle, Canvas, or another LMS — or when a course skill hands over an operations ledger to execute. Covers the safety protocol, the ledger contract, and dispatch to the active LMS binding.
++description: Use when creating, editing, re-dating, moving, hiding, renaming, or deleting course items (assignments, sections/modules), or granting individual due-date extensions in a learning management system — Moodle, Canvas, or another LMS — or when a course skill hands over an operations ledger to execute. Covers the safety protocol, the ledger contract, and dispatch to the active LMS binding.
+ ---
+ 
+ # LMS course administration
+@@ -184,3 +184,14 @@
+ Also read `references/hazards.md` once per task: it lists the neutral hazard classes and the
+ known instance of each on the active platform. A hazard you have not read is one you will
+ rediscover the expensive way.
++
++## Individual due-date extensions
++
++For a named student's extension, resolve the assignment and match the participant by email
++before previewing the recipient and exact new due time. This is a per-student exception, not
++a change to the assignment's common deadline and not a grading cycle. Record the recipient,
++assignment and intended timestamp in the operations audit; apply the same explicit approval,
++test-one, stop-on-error and independent-read verification rules as other writes.
++
++For Moodle, use the per-student extension recipe in
++`references/lms/moodle-recipes.md`. Do not add write verbs to the read-only client.
+--- a/plugins/lms/skills/lms-post-grades/SKILL.md
++++ b/plugins/lms/skills/lms-post-grades/SKILL.md
+@@ -54,35 +54,46 @@
+ python3 scripts/lms_grade.py post --assignment <id> --csv <file> --dry-run
+ ```
+ 
+-Checks, all of which abort the run:
++Require all of the following before a write; the helper and manual preflight checks must pass:
+ 
+-- row count unchanged; no `userid` added, removed, or altered
++- row count and exact `userid` set unchanged; no duplicate IDs in either sheet
+ - identity columns (name, email, max_grade) untouched
+ - grades numeric and within `0..max`
+ 
+ Blank grades are **reported, not assumed**. A blank grade with feedback is usually deliberate
+ ("come see me in office hours") and posts as ungraded; confirm intent with the instructor
+-rather than guessing either way. Refuse to post a sheet that failed validation and say what is
+-wrong.
++rather than guessing either way. The helper skips blank grade cells; after explicit
++confirmation, use `-1` when feedback should be posted with no mark. Refuse to post a sheet
++that failed validation and say what is wrong.
++
++Independently check the baseline and edited IDs for duplicates before using the helper: its
++current validator indexes the baseline by ID and does not explicitly reject duplicate rows.
++Keep the original column names; do not convert to Moodle's offline-worksheet schema.
+ 
+ ## 4. Say what will happen, then write one student
+ 
+ Grades post **immediately** on this install — marking workflow is off, so students see them
+ the moment they are written. Say so before the first write, especially if any placeholder
+-values are in the sheet.
++values are in the sheet. Show a per-student preview identifying the grade or ungraded state,
++whether feedback is present, and any late status. Obtain explicit approval for the actual
++writes; do not expose feedback contents in a status report unless requested.
++
++Check the resolved assignment's enabled feedback plugins before writing. The current helper
++always sends comments-editor fields: if that plugin is disabled, stop and adapt the writer
++to omit those fields before use, rather than assuming the server accepts them.
+ 
+ ```
+ python3 scripts/lms_grade.py post --assignment <id> --csv <file> --only <userid>
+ python3 scripts/lms_grade.py verify --assignment <id> --csv <file> --only <userid>
+ ```
+ 
+-Verify that one student end to end — grade *and* feedback — before the rest. Then:
++Verify that one student end to end — grade *and* feedback — before the rest. Continue with
++`post --only <userid>` followed by `verify --only <userid>` for each remaining approved row.
++Stop on the first API error, ambiguous response, or verification mismatch; identify the
++student and do not retry or continue blindly.
+ 
+-```
+-python3 scripts/lms_grade.py post --assignment <id> --csv <file>
+-```
+-
+-One call per student, so failures are per student and named.
++The helper's unrestricted `post` loop currently continues after a per-student write error.
++Use the single-student route above to preserve the stop-on-first-failure workflow.
+ 
+ ## 5. Verify — mandatory, never skip
+ 
+--- a/plugins/lms/skills/lms-admin/references/lms/moodle-recipes.md
++++ b/plugins/lms/skills/lms-admin/references/lms/moodle-recipes.md
+@@ -238,3 +238,29 @@
+ run. The Playwright profile persists between calls.
+ 
+ Never type the instructor's credentials. Hand the browser back for login and wait.
++
++## 10. Individual due-date extension — `mod_assign_save_user_extensions`
++
++Resolve the assignment instance ID from the current course binding and the student's user
++ID by matching email in `mod_assign_list_participants`. Preview that exact recipient and
++assignment with the new local date and time, and obtain approval under the common write
++protocol. Never change the assignment-wide due date to grant one student's exception.
++
++```text
++wsfunction=mod_assign_save_user_extensions
++assignmentid=<assignment-instance-id>
++userids[0]=<user-id>
++dates[0]=<Unix timestamp of the new due date>
++```
++
++Send this through the binding's Python POST transport with credentials read privately, not
++through `lms_read.py` (which remains read-only). Success returns an empty list; prove the
++result with `mod_assign_get_submission_status` and compare
++`lastattempt.extensionduedate` to the intended timestamp. Stop on an API error or mismatch.
++
++If the instructor supplies only a date, use the course's usual deadline time from
++`lms/course.yaml` and state the assumed time in the preview. Resolve the timezone from that
++course policy; for these NC State offerings it is `America/New_York`. Build the timestamp
++with an aware `datetime` and `zoneinfo.ZoneInfo`, never a naive local datetime. Keep the
++assignment, recipient, expected timestamp and read-back result in the nonsecret operations
++audit. No grading sheet or grade write is needed for this operation.
+--- a/plugins/lms/skills/lms-admin/references/lms/moodle.md
++++ b/plugins/lms/skills/lms-admin/references/lms/moodle.md
+@@ -54,6 +54,7 @@
+ | grades | `mod_assign_get_grades` (`assignmentids[0]`) |
+ | gradebook cross-check | `gradereport_user_get_grade_items` (`courseid`, `userid`) |
+ | write one grade | `mod_assign_save_grade` — see `moodle-recipes.md` |
++| individual due-date extension | `mod_assign_save_user_extensions` — see `moodle-recipes.md` |
+ 
+ **Authoring surface** — the browser, authenticated by Shibboleth. Required for creating and
+ editing activities, renaming, moving, deleting, and anything touching `gradecat`. Recipes in
+--- a/plugins/lms/plugin.json
++++ b/plugins/lms/plugin.json
+@@ -1,7 +1,7 @@
+ {
+   "name": "lms",
+   "description": "LMS-neutral course administration: operations ledger, guarded writes, submission retrieval, grade posting. Moodle binding included; Canvas binding is a drop-in.",
+-  "version": "1.0.0",
++  "version": "1.0.1",
+   "author": {
+     "name": "Brad Reaves"
+   }
