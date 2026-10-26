@@ -1,0 +1,4 @@
+interface:
+  display_name: "Paper Filter"
+  short_description: "Filter CS proceedings into enriched BibTeX"
+  default_prompt: "Use $paper-filter to find papers from a venue and year matching my criteria and produce enriched BibTeX with expert loglines."
