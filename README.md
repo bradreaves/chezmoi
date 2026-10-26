@@ -10,13 +10,18 @@ This uses `chezmoi` to install and maintain my dotfiles.
 
 ## Setup for MacOS
 
+For this laptop, choose **yes** for desktop/workstation apps (`isDesktop=true`)
+and **yes** for a work machine (`isWork=true`) during init. The desktop choice
+includes GUI laptops. Init with `--apply` renders `~/.config/Brewfile`; the
+Homebrew installation step below is separate.
+
  1. Install [Homebrew](https://brew.sh)
  2. Install `chezmoi`: ```/opt/homebrew/bin/brew install chezmoi```
  3. If restoring Spacemacs, clone its distribution first as described below. Init and apply dotfiles: ```/opt/homebrew/bin/chezmoi init bradreaves/chezmoi --apply```
  4. Trust the [Emacs Plus tap](https://github.com/d12frosted/homebrew-emacs-plus): `/opt/homebrew/bin/brew trust d12frosted/emacs-plus`. Install Homebrew packages: `/opt/homebrew/bin/brew bundle install --file ~/.config/Brewfile`
  5. Check that `/opt/homebrew/bin/fish` is installed correctly
  6. Add `/opt/homebrew/bin/fish` to /etc/shells
- 0. Start Insync to pull down Google Drive content
+ 0. Sign in to Google Drive and Dropbox and sync the folders being restored.
 
  7. Make fish the default shell: ```chsh -s /opt/homebrew/bin/fish```
  8. Open fish shell
@@ -32,6 +37,12 @@ This uses `chezmoi` to install and maintain my dotfiles.
 13. Add 1Blocker, Bitwarden, Pocket, and Zotero plugins to browser
 14. Setup Zotero sync and install BetterBibTool
 15. Setup Lunar and Stats
+
+The Brewfile installs `uv` through Homebrew and retains `pipx`. On this Apple
+Silicon Mac, the Homebrew `uv` and `uvx` executables are under
+`/opt/homebrew/bin`; avoid restoring the old installer-provided binaries over
+them. Bitwarden's macOS app and its CLI are separate installations, so the
+Brewfile keeps both the app and [`bitwarden-cli`](https://bitwarden.com/help/cli/).
 
 ## Restore Tailscale on macOS
 

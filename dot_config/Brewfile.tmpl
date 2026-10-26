@@ -1,82 +1,118 @@
-{{/* All machines */}}
+{{/* Command-line tools on all machines. Dependencies are resolved by Homebrew. */}}
 
+brew "ansible"
+brew "ansible-lint"
 brew "bat"
+brew "bitwarden-cli"
 brew "btop"
 brew "byobu"
+brew "carapace"
+brew "elixir"
+brew "elixir-ls"
+brew "epubcheck"
+brew "ffmpeg"
 brew "fish"
+brew "flarectl"
 brew "forgejo-cli"
 brew "gh"
+brew "glow"
 brew "herdr"
 brew "htop"
 brew "ispell"
 brew "jj"
+brew "mtr"
 brew "neovim"
+brew "node"
 brew "openconnect"
+brew "opentofu"
+brew "parallel"
+brew "pipx"
+brew "poppler"
+brew "pstree"
 brew "ripgrep"
+brew "shellcheck"
+brew "socat"
 brew "tealdeer"
 brew "tmux"
 brew "trash"
 brew "tree"
+brew "uv"
 brew "wget"
 brew "yazi"
+brew "yq"
+brew "yt-dlp"
+brew "zoxide"
 
-
-{{/* All desktops */}}
-
-{{- if eq .isDesktop true -}}
-cask "balenaetcher"
-cask "claude"
-cask "firefox"
+{{ if .isDesktop }}
+{{/* Workstation tools available on both macOS and Linux. */}}
 brew "hugo"
-cask "insync"
-cask "obsidian"
 brew "pandoc"
-cask "spotify"
-cask "slack"
-cask "visual-studio-code"
-cask "vlc"
-cask "zotero"
-cask "zoom"
 
+{{ if eq .chezmoi.os "darwin" }}
+{{/* macOS workstation applications and fonts. */}}
+cask "affinity"
+cask "audacity"
+cask "balenaetcher"
+cask "bazecor"
+cask "brave-browser"
+cask "calibre"
+cask "claude"
+cask "dropbox"
+cask "element"
+cask "firefox"
 cask "font-archivo"
 cask "font-archivo-black"
 cask "font-archivo-narrow"
-cask "font-eb-garamond"
-cask "font-iosevka-etoile"
-cask "font-iosevka-nerd-font"
-cask "font-iosevka-term-nerd-font"
-cask "font-iosevka-term-slab-nerd-font"
+cask "font-dejavu-sans"
+cask "font-linux-biolinum"
+cask "font-linux-libertine"
 cask "font-national-park"
+cask "font-raleway"
+cask "font-roboto-mono"
 cask "font-routed-gothic"
+cask "font-source-sans-3"
+cask "font-source-serif-4"
+cask "google-drive"
+cask "iterm2"
+cask "lm-studio"
+cask "obsidian"
+cask "scansnap-home"
+cask "slack"
+cask "spotify"
+cask "typora"
+cask "vlc"
+cask "wispr-flow"
+cask "zed"
+cask "zoom"
+cask "zotero"
+{{ end }}
+{{ end }}
 
-{{- end -}}
-
-{{/* MacOS */}}
-
-{{- if eq .chezmoi.os "darwin" }}
+{{ if eq .chezmoi.os "darwin" }}
+{{/* macOS installation and platform tools. */}}
 tap "d12frosted/emacs-plus"
+brew "mas"
+
+cask "codex"
+cask "colemak-dh"
 cask "d12frosted/emacs-plus/emacs-plus-app"
 cask "font-monaspice-nerd-font"
-
-cask "colemak-dh"
-cask "disk-inventory-x"
-cask "insync"
 cask "ghostty"
 cask "lunar"
 cask "mactex-no-gui"
-brew "mas"
+cask "omnidisksweeper"
 cask "stats"
 cask "tailscale-app"
 
-{{-     if eq .isWork false }}
+{{ if not .isWork }}
 cask "steam"
-{{      end }}
+{{ end }}
 
-{{-     if eq .isDesktop true }}
+{{ if .isDesktop }}
 mas "Microsoft Excel", id: 462058435
 mas "Microsoft PowerPoint", id: 462062816
 mas "Microsoft Word", id: 462054704
-{{      end }}
+{{ end }}
 
 mas "1Blocker", id: 1365531024
 mas "Bitwarden", id: 1352778147
@@ -85,5 +121,7 @@ mas "Keynote", id: 409183694
 mas "Numbers", id: 409203825
 mas "RadarScope", id: 288419283
 mas "Save to Raindrop.io", id: 1549370672
-
-{{- end -}} 
+mas "Todoist", id: 585829637
+mas "Xcode", id: 497799835
+mas "iMovie", id: 408981434
+{{ end }}
