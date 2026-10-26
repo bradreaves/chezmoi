@@ -13,7 +13,7 @@ This uses `chezmoi` to install and maintain my dotfiles.
  1. Install [Homebrew](https://brew.sh)
  2. Install `chezmoi`: ```/opt/homebrew/bin/brew install chezmoi```
  3. If restoring Spacemacs, clone its distribution first as described below. Init and apply dotfiles: ```/opt/homebrew/bin/chezmoi init bradreaves/chezmoi --apply```
- 4. Install Homebrew packages: ```/opt/homebrew/bin/brew bundle install --file ~/.config/Brewfile```
+ 4. Trust the [Emacs Plus tap](https://github.com/d12frosted/homebrew-emacs-plus): `/opt/homebrew/bin/brew trust d12frosted/emacs-plus`. Install Homebrew packages: `/opt/homebrew/bin/brew bundle install --file ~/.config/Brewfile`
  5. Check that `/opt/homebrew/bin/fish` is installed correctly
  6. Add `/opt/homebrew/bin/fish` to /etc/shells
  0. Start Insync to pull down Google Drive content

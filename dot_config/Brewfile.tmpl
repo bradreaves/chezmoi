@@ -49,6 +49,10 @@ cask "font-routed-gothic"
 {{/* MacOS */}}
 
 {{- if eq .chezmoi.os "darwin" }}
+tap "d12frosted/emacs-plus"
+cask "d12frosted/emacs-plus/emacs-plus-app"
+cask "font-monaspice-nerd-font"
+
 cask "colemak-dh"
 cask "disk-inventory-x"
 cask "insync"
