@@ -33,6 +33,13 @@ This uses `chezmoi` to install and maintain my dotfiles.
 14. Setup Zotero sync and install BetterBibTool
 15. Setup Lunar and Stats
 
+## Shared agent skills
+
+The Shell Script Installer skill is stored once under
+`~/.claude/skills/shell-script-installer`. The managed
+`~/.agents/skills/shell-script-installer` symlink points to that same directory,
+so Claude and Codex use the same saved version.
+
 ## Restore Codex
 
 The portable Codex config and global instructions are managed here. Follow the
