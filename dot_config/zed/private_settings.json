@@ -1,0 +1,92 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "ssh_connections": [
+    {
+      "host": "openclaw",
+      "args": [],
+      "projects": [
+        {
+          "paths": [
+            "/home/openclaw"
+          ]
+        }
+      ]
+    },
+    {
+      "host": "openclaw-oc",
+      "args": [],
+      "projects": []
+    }
+  ],
+  "agent_servers": {
+    "opencode": {
+      "favorite_config_option_values": {
+        "model": [
+          "openrouter/deepseek/deepseek-v4-flash:free",
+          "openrouter/deepseek/deepseek-v4-flash",
+          "openrouter/deepseek/deepseek-v4-pro"
+        ]
+      },
+      "type": "registry"
+    },
+    "claude-acp": {
+      "type": "registry"
+    }
+  },
+  "project_panel": {
+    "dock": "right"
+  },
+  "outline_panel": {
+    "dock": "right"
+  },
+  "collaboration_panel": {
+    "dock": "right"
+  },
+  "git_panel": {
+    "dock": "right"
+  },
+  "agent": {
+    "thinking_display": "always_collapsed",
+    "enable_feedback": false,
+    "dock": "left",
+    "default_model": {
+      "provider": "lmstudio",
+      "model": "qwen/qwen3-4b-2507"
+    },
+    "favorite_models": [],
+    "model_parameters": []
+  },
+  "terminal": {
+    "font_family": ".ZedMono"
+  },
+  "autosave": {
+    "after_delay": {
+      "milliseconds": 1000,
+    },
+  },
+  "show_edit_predictions": false,
+  "icon_theme": "Zed (Default)",
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false,
+  },
+  "session": {
+    "trust_all_worktrees": true,
+  },
+  "vim_mode": true,
+  "base_keymap": "Emacs",
+  "ui_font_size": 16,
+  "buffer_font_size": 15,
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "Ayu Dark",
+  },
+}
