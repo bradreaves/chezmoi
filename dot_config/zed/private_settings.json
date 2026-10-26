@@ -26,16 +26,6 @@
     }
   ],
   "agent_servers": {
-    "opencode": {
-      "favorite_config_option_values": {
-        "model": [
-          "openrouter/deepseek/deepseek-v4-flash:free",
-          "openrouter/deepseek/deepseek-v4-flash",
-          "openrouter/deepseek/deepseek-v4-pro"
-        ]
-      },
-      "type": "registry"
-    },
     "claude-acp": {
       "type": "registry"
     }
