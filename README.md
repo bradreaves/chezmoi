@@ -44,6 +44,39 @@ Silicon Mac, the Homebrew `uv` and `uvx` executables are under
 them. Bitwarden's macOS app and its CLI are separate installations, so the
 Brewfile keeps both the app and [`bitwarden-cli`](https://bitwarden.com/help/cli/).
 
+## Restore non-Homebrew tools
+
+After `brew bundle`, restore the scripts repository and run its tool installer:
+
+```fish
+git clone git@forgejo.llama-bass.ts.net:cqr/qol-scripts.git ~/bin/scripts
+fish ~/bin/scripts/restore-tools --dry-run
+fish ~/bin/scripts/restore-tools
+```
+
+If the repository already exists, use that checkout. The installer restores
+Whisper `20250625`, Zotero MCP `0.13.0` with semantic search, and Playwright CLI
+`0.0.63`. uv downloads Python 3.12; Whisper uses pipx, Zotero uses uv, and
+Playwright uses npm under `~/.local`. Keep `~/.local/bin` on PATH. The installer
+uses Homebrew's Node/npm, rather than old symlinks into the local Hermes tree.
+It is an explicit step; `chezmoi init --apply` does not run it.
+
+Do not restore DVC, vobject, Piper TTS, Ansible Dev Tools/Navigator, Yarn Classic,
+the old global Claude ACP adapter, or local Hermes/browser-use. These choices
+affect the fresh install; the current laptop's packages are unchanged. The
+saved Emacs ACP adapters still use the separate lockfile procedure below.
+
+These package versions record the installed snapshot; they do not lock all
+dependencies. Zotero still needs its library, local API and regenerated index.
+The saved Zotero MCP launcher explicitly names its Python distribution so it
+can bootstrap without relying on the old installed environment. See the
+[upstream Zotero instructions](https://github.com/54yyyu/zotero-mcp) and
+[uv tool selectors](https://docs.astral.sh/uv/guides/tools/).
+
+The Claude desktop cask and native Claude CLI are separate restore steps.
+Install the CLI using its [official setup instructions](https://code.claude.com/docs/en/setup)
+and sign in before using the agent-shell layer or scripts that invoke `claude`.
+
 ## Restore Tailscale on macOS
 
 The Brewfile installs the standalone desktop app using `cask "tailscale-app"`.

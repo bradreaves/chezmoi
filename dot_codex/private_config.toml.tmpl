@@ -142,7 +142,7 @@ PATH = "{{ $brewPrefix }}/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 [mcp_servers."zotero"]
 command = {{ $uvx | quote }}
-args = ["--with", "mcp<2", "zotero-mcp"]
+args = ["--python", "3.12", "--with", "mcp<2", "--from", "zotero-mcp-server[semantic]==0.13.0", "zotero-mcp"]
 
 [mcp_servers."zotero".env]
 ZOTERO_EMBEDDING_MODEL = "default"

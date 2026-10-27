@@ -44,15 +44,17 @@ manager to restore missing plugins, and authenticate connected services again.
 ## Custom MCP dependencies
 
 `uvx` and `npx` fetch their packages on first use, so internet access is needed.
-The existing package selectors are preserved, including `mcp<2` and the two
-`@latest` selectors; exact package versions are not locked by this backup.
+The `mcp<2` constraint and the two `@latest` selectors are retained. Zotero's
+distribution is explicitly selected as `zotero-mcp-server[semantic]==0.13.0`
+with Python 3.12; the command it provides is named `zotero-mcp`. Other package
+versions and transitive dependencies are not locked by this backup.
 
 | Server | Saved launcher/package | Additional prerequisite |
 |---|---|---|
 | `mcp-obsidian` | `uvx --with 'mcp<2' mcp-obsidian` | Restore the vault and enable Obsidian's Local REST API plugin; provide `OBSIDIAN_API_KEY`. |
 | `time` | `uvx --with 'mcp<2' mcp-server-time` | Timezone remains `America/New_York`. |
 | `whois` | `npx -y @bharathvaj/whois-mcp@latest` | Network access for WHOIS queries. |
-| `zotero` | `uvx --with 'mcp<2' zotero-mcp` | Install Zotero, restore/sync the library and attachments, enable its local API, and open Zotero. Local mode and the default embedding model are retained; caches are regenerated. |
+| `zotero` | `uvx --python 3.12 --with 'mcp<2' --from 'zotero-mcp-server[semantic]==0.13.0' zotero-mcp` | Install Zotero, restore/sync the library and attachments, enable its local API, and open Zotero. Local mode and the default embedding model are retained; caches are regenerated. |
 | `github` | `https://api.githubcopilot.com/mcp/` | Provide `GITHUB_PERSONAL_ACCESS_TOKEN` with permissions appropriate to the repositories/tools used. |
 | `powerpoint-web` | `npx -y @playwright/mcp@latest --isolated` | Install the required Playwright browser when prompted; isolated browser sessions need fresh sign-in. |
 
