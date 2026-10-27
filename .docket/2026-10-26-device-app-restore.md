@@ -11,9 +11,9 @@ requests for the supported devices you use.
 If device settings were backed up through a Logitech account, sign in and
 restore the appropriate Mac backup. Verify button/key mappings, scrolling and
 any application-specific profiles against the physical device. Account backup
-availability has not been verified during this audit. Local Options+ data and
-preferences still need a separate recovery decision; their presence is not
-proof of a complete cloud backup.
+availability has not been verified during this audit. Local Options+ data and preferences are preserved in the verified recovery
+archive described below. Their presence is not proof of a complete Logitech
+account backup, and restoring the raw files into a newer version is untested.
 
 Logitech use was confirmed. Loupedeck-specific software was not selected by
 that decision; do not install it solely because an old plugin service exists.
@@ -34,8 +34,8 @@ old driver is not part of this restore.
 Add the printer/scanner and verify a print and a scan. Compare needed scan
 settings and printer presets with the separately preserved settings before
 considering device recovery complete. The existing Epson preferences/presets
-have been identified, but their backup and fresh-OS compatibility are not yet
-verified. ScanSnap Home is a separate, already selected application.
+are preserved in the verified recovery archive below. Their fresh-OS
+compatibility is not yet verified. ScanSnap Home is a separate, already selected application.
 
 ## Applications excluded by the user
 
@@ -60,3 +60,27 @@ This checklist and the Brewfile entry preserve the approved install choices.
 The Logitech cask definition and Epson model-support page were checked. No
 installer, driver, reboot or device test was run on the current laptop, and
 the full fresh-OS restore has not been tested.
+
+## Local settings recovery archive
+
+The dated Dropbox folder
+`_PersonalReference/Software/Laptop Reinstall Backup/2026-10-26/app-data/`
+contains `device-settings.tar.gz`. It preserves 193 Logitech/Epson support and
+preference files, including Epson scanner settings and printer presets. Its
+SHA-256 is `9a45bfbbfbed294330dcffadd4ae93344aeeeede314f03bd4d15a9fa69d845b0`.
+The archive was checked member by member against captured-source hashes, with
+unchanged source file inventory/stat signatures during capture.
+
+Two additional files, `logitech-settings-consistent.sqlite` and
+`logitech-macros-consistent.sqlite`, are standalone SQLite backup snapshots.
+Both passed integrity checks and reopened independently. Their hashes and
+source paths are recorded in the archive folder's
+`.docket/2026-10-26-device-settings-manifest.json`.
+
+Extract the archive into an empty staging folder and use the stored preferences
+as a recovery source after installing the supported applications. Prefer
+Logitech's supported account restore when available. Do not overwrite a running
+settings database or restore old background services, drivers or launch agents
+from the archive. App-level settings import and physical-device testing have
+not been performed. Dropbox upload completion for these new files still needs
+verification before wiping.
