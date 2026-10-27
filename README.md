@@ -77,6 +77,13 @@ The Claude desktop cask and native Claude CLI are separate restore steps.
 Install the CLI using its [official setup instructions](https://code.claude.com/docs/en/setup)
 and sign in before using the agent-shell layer or scripts that invoke `claude`.
 
+## Restore device applications
+
+Logitech Options+ is included in the macOS desktop Brewfile. Epson Scan 2 and
+the ET-2720 printer/scanner driver use Epson's model-specific installer.
+Follow the [device-app restore checklist](.docket/2026-10-26-device-app-restore.md)
+for setup, settings recovery and the applications excluded from reinstall.
+
 ## Restore Tailscale on macOS
 
 The Brewfile installs the standalone desktop app using `cask "tailscale-app"`.
