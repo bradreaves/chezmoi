@@ -77,6 +77,23 @@ The Claude desktop cask and native Claude CLI are separate restore steps.
 Install the CLI using its [official setup instructions](https://code.claude.com/docs/en/setup)
 and sign in before using the agent-shell layer or scripts that invoke `claude`.
 
+## Restore Safari web apps
+
+Recreate these three web apps on the fresh Mac:
+
+| App | URL |
+|---|---|
+| Calendar | <https://calendar.google.com/calendar/r> |
+| Gmail | <https://mail.google.com/mail/> |
+| iCloud Mail | <https://www.icloud.com/mail/> |
+
+Open each URL in Safari, sign in to the desired account, then choose
+**File → Add to Dock**. Open the resulting app and verify the account and
+notification settings. See [Apple's web-app instructions](https://support.apple.com/en-us/104996).
+
+Leave IMC and SIPNOC conference schedules, Discord and Mattermost out of the
+restore list.
+
 ## Restore device applications
 
 Logitech Options+ is included in the macOS desktop Brewfile. Epson Scan 2 and
