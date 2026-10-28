@@ -16,7 +16,7 @@ includes GUI laptops. Init with `--apply` renders `~/.config/Brewfile`; the
 Homebrew installation step below is separate.
 
  1. Install [Homebrew](https://brew.sh)
- 2. Install `chezmoi`: ```/opt/homebrew/bin/brew install chezmoi```
+ 2. Install `chezmoi` and Fish before applying dotfiles: ```/opt/homebrew/bin/brew install chezmoi fish```. Load Homebrew into the current shell's PATH: ```eval "$(/opt/homebrew/bin/brew shellenv)"```. The chezmoi setup hook uses `#!/usr/bin/env fish`, so Fish must already be on PATH.
  3. If restoring Spacemacs, clone its distribution first as described below. Init and apply dotfiles: ```/opt/homebrew/bin/chezmoi init bradreaves/chezmoi --apply```
  4. Trust the [Emacs Plus tap](https://github.com/d12frosted/homebrew-emacs-plus): `/opt/homebrew/bin/brew trust d12frosted/emacs-plus`. Install Homebrew packages: `/opt/homebrew/bin/brew bundle install --file ~/.config/Brewfile`
  5. Check that `/opt/homebrew/bin/fish` is installed correctly
